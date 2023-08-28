@@ -6,14 +6,16 @@ import Home from "./routes/Home.tsx";
 import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
+import {BiSolidHome} from "react-icons/bi";
+import {IoExtensionPuzzle} from "react-icons/io5";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <BrowserRouter>
             <div>
                 <ul>
-                    <li><Link to={"/"}>Home</Link></li>
-                    <li><Link to={"/modules"}>Modules</Link></li>
+                    <li className="flex items-center gap-2"><BiSolidHome/><Link to={"/"}>Home</Link></li>
+                    <li className="flex items-center gap-2"><IoExtensionPuzzle/><Link to={"/modules"}>Modules</Link></li>
                 </ul>
             </div>
             <Routes>
