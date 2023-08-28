@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import './global.css'
+import {Button} from "../components/ui/button.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+      <Button>
+          <p>Hello World!</p>
+      </Button>
   </React.StrictMode>,
 )
