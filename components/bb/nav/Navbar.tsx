@@ -4,6 +4,8 @@ import {useState} from "react";
 import {MdLogin} from "react-icons/md";
 import {UserDropdownMenu} from "./UserDropdownMenu.tsx";
 import {Button} from "../../ui/button.tsx";
+import {Github} from "lucide-react";
+import {BsDiscord} from "react-icons/bs";
 
 const navItems = [
     {
@@ -11,6 +13,18 @@ const navItems = [
         path: "/modules",
         icon: <IoExtensionPuzzle className="mr-2 h-4 w-4"/>,
         key: "modules"
+    },
+    {
+        name: "GitHub",
+        url: "https://github.com/BattleBit-Community-Servers",
+        icon: <Github className="mr-2 h-4 w-4"/>,
+        key: "github"
+    },
+    {
+        name: "Discord",
+        url: "https://discord.gg/FTkj9xUvHh",
+        icon: <BsDiscord className="mr-2 h-4 w-4"/>,
+        key: "discord"
     }
 ];
 
@@ -24,7 +38,7 @@ export const Navbar = () => {
             </Link>
             <div className="flex items-center gap-4 ml-auto">
                 {navItems.map((item) => (
-                    <Link className="flex items-center" to={item.path} key={item.key}>
+                    <Link className="flex items-center" to={item.path ?? item.url} key={item.key}>
                         {item.icon}
                         <span>{item.name}</span>
                     </Link>
