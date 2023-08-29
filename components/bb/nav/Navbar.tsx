@@ -52,13 +52,7 @@ export const Navbar = () => {
                         <Button onClick={() => {
                             setLoggedIn(true)
                         }}>
-                            <Link
-                                className="flex items-center gap-2"
-                                to={"/login"}
-                            >
-                                <span><MdLogin/></span>
-                                Login
-                            </Link>
+                                <span className="flex items-center gap-2"><MdLogin/>Login</span>
                         </Button>
                     </div>
                 )}

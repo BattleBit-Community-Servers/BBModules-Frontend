@@ -5,7 +5,6 @@ import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
 import {Navbar} from "../components/bb/nav/Navbar.tsx";
 import {Slide, ToastContainer} from "react-toastify";
-import LoginPage from "./routes/users/LoginPage.tsx";
 
 export default function App() {
     return (
@@ -28,7 +27,6 @@ export default function App() {
                     <Navbar/>
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path={"/login"} element={<LoginPage/>}/>
                         <Route path={"/module/:id"} element={<ModulePage/>}/>
                         <Route path={"/modules"} element={<ModuleListPage/>}/>
                         <Route path="*" element={<NotFound/>}/>

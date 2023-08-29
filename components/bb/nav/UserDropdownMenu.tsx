@@ -14,9 +14,11 @@ import {
 } from "../../ui/dropdown-menu"
 import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
 import {useState} from "react";
+import {mockUserData} from "../../../src/mockdata.ts";
 
 export function UserDropdownMenu() {
     const [loggedIn, setLoggedIn] = useState(false);
+    const user = mockUserData[Math.floor(Math.random() * mockUserData.length)];
 
     console.log(loggedIn);
 
@@ -24,12 +26,12 @@ export function UserDropdownMenu() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
-                    <AvatarImage src="https://cdn.discordapp.com/avatars/337296708117594113/0552ba8ca1673e398ffaf3e3f14f095d.webp?size=96"/>
+                    <AvatarImage src={user.User_profile_picture} alt="User Profile Picture"/>
                     <AvatarFallback>BB</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>Logged in as {user.User_displayname}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="cursor-pointer">

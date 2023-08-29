@@ -1,4 +1,4 @@
-import mockModuleData from "../../mockdata.ts";
+import {mockModuleData} from "../../mockdata.ts";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
 import {Link, useParams} from "react-router-dom";
@@ -33,21 +33,21 @@ export default function ModulePage() {
                 <div className="mb-4 w-4/5 flex flex-col gap-3">
                     <Card>
                         <CardHeader>
-                            <CardDescription>{moduleData.ModuleShortDescription}</CardDescription>
+                            <CardDescription>{moduleData.Module_shortdesc}</CardDescription>
                         </CardHeader>
                     </Card>
                     <div className="flex flex-col gap-3">
-                        <Card key={moduleData.ModuleId}>
+                        <Card key={moduleData.Module_id}>
                             <CardHeader>
-                                <CardTitle>{moduleData.ModuleName}</CardTitle>
-                                <CardDescription>{moduleData.ModuleShortDescription}</CardDescription>
+                                <CardTitle>{moduleData.Module_name}</CardTitle>
+                                <CardDescription>{moduleData.Module_shortdesc}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div>Author ID: {moduleData.ModuleAuthorId}</div>
-                                <div>Downloads: {moduleData.ModuleDownloads}</div>
-                                <div>Created At: {moduleData.ModuleCreatedAt}</div>
-                                <div>Updated At: {moduleData.ModuleUpdatedAt}</div>
-                                <div>Markdown: {moduleData.ModuleMarkdown}</div>
+                                <div>Author ID: {moduleData.Module_author_id}</div>
+                                <div>Downloads: {moduleData.Module_downloads}</div>
+                                <div>Created At: {moduleData.Module_created_at}</div>
+                                <div>Updated At: {moduleData.Module_updated_at}</div>
+                                <div>Markdown: {moduleData.Module_markdown}</div>
                             </CardContent>
                         </Card>
 
@@ -68,7 +68,7 @@ export default function ModulePage() {
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-col gap-3">
-                            <Link to={`/module/${moduleData.ModuleAuthorId}/download`}>
+                            <Link to={`/module/${moduleData.Module_author_id}/download`}>
                                 <Button className="w-full"><ImDownload className="mr-2 h-4 w-4" />Download</Button>
                             </Link>
                             <Dialog open={openConfirmApproveModal} onOpenChange={setOpenConfirmApproveModal}>
