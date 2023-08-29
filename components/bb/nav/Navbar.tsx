@@ -18,13 +18,15 @@ const navItems = [
         name: "GitHub",
         url: "https://github.com/BattleBit-Community-Servers",
         icon: <Github className="mr-2 h-4 w-4"/>,
-        key: "github"
+        key: "github",
+        target: "_blank"
     },
     {
         name: "Discord",
         url: "https://discord.gg/FTkj9xUvHh",
         icon: <BsDiscord className="mr-2 h-4 w-4"/>,
-        key: "discord"
+        key: "discord",
+        target: "_blank"
     }
 ];
 
@@ -38,7 +40,7 @@ export const Navbar = () => {
             </Link>
             <div className="flex items-center gap-4 ml-auto">
                 {navItems.map((item) => (
-                    <Link className="flex items-center" to={item.path ?? item.url} key={item.key}>
+                    <Link target={item.target} className="flex items-center" to={item.path ?? item.url} key={item.key}>
                         {item.icon}
                         <span>{item.name}</span>
                     </Link>

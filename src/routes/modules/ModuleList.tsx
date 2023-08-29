@@ -21,18 +21,21 @@ export default function ModuleListPage() {
                                 <p>Downloads: {module.Module_downloads}</p>
                                 <p>Id: {module.Module_id}</p>
                             </div>
+                        </CardContent>
+                        <CardFooter className="flex justify-between">
+
                             <div className="flex items-center gap-2">
-                                {users[module.Module_author_id].User_displayname}
                                 <Avatar className="cursor-pointer">
                                     <img src={users[module.Module_author_id].User_profile_picture} alt="User Profile Picture"/>
                                 </Avatar>
+                                {users[module.Module_author_id].User_displayname}
                             </div>
-                        </CardContent>
-                        <CardFooter className="flex justify-between">
-                            <Link to={`/module/${module.Module_id}`}>
-                                <Button variant="outline">View</Button>
-                            </Link>
-                            <Button>Download</Button>
+                            <div className="flex gap-2">
+                                <Link to={`/module/${module.Module_id}`}>
+                                    <Button variant="outline">View</Button>
+                                </Link>
+                                <Button>Download</Button>
+                            </div>
                         </CardFooter>
                     </Card>
                 ))}
