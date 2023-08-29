@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "../../../components/ui/dialog"
 import { useState } from "react";
+import {toast} from "react-toastify";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
@@ -22,7 +23,7 @@ export default function ModulePage() {
 
     // TODO: Implement approveModule to actually
     // approve the module in the database
-    const approveModule = () => {
+    const approveModule = async () => {
         setOpenConfirmApproveModal(false);
     };
 
@@ -50,9 +51,9 @@ export default function ModulePage() {
                             </CardContent>
                         </Card>
 
-                        <Card className="">
+                        <Card>
                             <CardHeader>
-                                <CardTitle>Dependancies</CardTitle>
+                                <CardTitle>Dependencies</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <p>Dependencies go here</p>
@@ -83,7 +84,11 @@ export default function ModulePage() {
                                     </DialogHeader>
                                     <DialogFooter>
                                         <Button onClick={() => setOpenConfirmApproveModal(false)} variant={"destructive"}>Cancel</Button>
-                                        <Button onClick={() => approveModule()} type="submit">Approve</Button>
+                                        <Button onClick={() => toast.promise(approveModule(), {
+                                            pending: "Approving module...",
+                                            success: "Module approved!",
+                                            error: "Failed to approve module!"
+                                        })} type="submit">Approve</Button>
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>
