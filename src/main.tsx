@@ -7,7 +7,7 @@ import Home from "./routes/Home.tsx";
 import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
-import {Navbar} from "../components/bb/Navbar.tsx";
+import {Navbar} from "../components/bb/nav/Navbar.tsx";
 import {Slide, ToastContainer} from "react-toastify";
 import LoginPage from "./routes/users/LoginPage.tsx";
 

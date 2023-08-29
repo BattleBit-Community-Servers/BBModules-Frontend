@@ -12,11 +12,16 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
-import {Avatar, AvatarFallback, AvatarImage} from "../ui/avatar";
+} from "../../ui/dropdown-menu"
+import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
 import {BsDiscord} from "react-icons/bs";
+import {useState} from "react";
 
 export function UserDropdownMenu() {
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    console.log(loggedIn);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -52,7 +57,10 @@ export function UserDropdownMenu() {
                     <span>Discord</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem className="cursor-pointer" onClick={() => {
+                    setLoggedIn(!loggedIn);
+                    window.location.reload();
+                }}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                 </DropdownMenuItem>

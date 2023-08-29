@@ -3,19 +3,19 @@ import {IoExtensionPuzzle} from "react-icons/io5";
 import {useState} from "react";
 import {MdLogin} from "react-icons/md";
 import {UserDropdownMenu} from "./UserDropdownMenu.tsx";
+import {Button} from "../../ui/button.tsx";
 
 const navItems = [
     {
         name: "Modules",
         path: "/modules",
-        icon: <IoExtensionPuzzle className="mr-2 h-4 w-4" />,
+        icon: <IoExtensionPuzzle className="mr-2 h-4 w-4"/>,
         key: "modules"
     }
 ];
 
 export const Navbar = () => {
-    const [loggedIn] = useState(Boolean);
-    console.log(loggedIn);
+    const [loggedIn, setLoggedIn] = useState(false);
     return (
         <nav className="flex gap-4 mb-8">
             <Link className="flex items-center gap-2"
@@ -35,7 +35,17 @@ export const Navbar = () => {
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 ml-auto">
-                        <Link className="flex items-center gap-2" to={"/login"}><span><MdLogin/></span>Login</Link>
+                        <Button onClick={() => {
+                            setLoggedIn(true)
+                        }}>
+                            <Link
+                                className="flex items-center gap-2"
+                                to={"/login"}
+                            >
+                                <span><MdLogin/></span>
+                                Login
+                            </Link>
+                        </Button>
                     </div>
                 )}
             </div>
