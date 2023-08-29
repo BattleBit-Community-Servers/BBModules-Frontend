@@ -12,7 +12,7 @@ export default function App() {
         <>
             <ToastContainer
                 position={"top-right"}
-                autoClose={3000}
+                autoClose={2354235235324532}
                 hideProgressBar={false}
                 transition={Slide}
                 newestOnTop={false}
