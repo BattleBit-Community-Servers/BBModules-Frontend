@@ -23,7 +23,6 @@ export default function ModuleListPage() {
                             </div>
                         </CardContent>
                         <CardFooter className="flex justify-between">
-
                             <div className="flex items-center gap-2">
                                 <Avatar className="cursor-pointer">
                                     <img src={users[module.Module_author_id].User_profile_picture} alt="User Profile Picture"/>
