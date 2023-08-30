@@ -1,8 +1,10 @@
-import {mockModuleData} from "../../mockdata.ts";
+import {mockModuleData, mockUserData} from "../../mockdata.ts";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
+import {AiFillCheckCircle} from "react-icons/ai";
+import {BsDiscord} from "react-icons/bs";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +20,7 @@ import {toast} from "react-toastify";
 export default function ModulePage() {
     const {id = ""} = useParams();
     const moduleData = mockModuleData[parseInt(id) - 1];
+    const authorData = mockUserData[moduleData.Module_author_id];
 
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
 
@@ -30,7 +33,7 @@ export default function ModulePage() {
     return (
         <>
             <div id="module-container" className="flex gap-4">
-                <div className="mb-4 w-4/5 flex flex-col gap-3">
+                <div className="mb-4 w-9/12 flex flex-col gap-3">
                     <Card>
                         <CardHeader>
                             <CardDescription>{moduleData.Module_shortdesc}</CardDescription>
@@ -62,13 +65,20 @@ export default function ModulePage() {
                     </div>
                 </div>
                 
-                <Card className="w-1/5 flex flex-col gap-3">
+                <Card className="w-3/12 flex flex-col gap-3">
                     <CardHeader>
-                        <CardTitle>@Author</CardTitle>
+                        <CardTitle className="flex items-center gap-2">
+                            <img width={50} src={authorData.User_profile_picture} />
+                            <div className="flex flex-col">
+                                <p>{authorData.User_displayname}</p>
+                                <p className="text-sm mt-1 flex items-center"><BsDiscord className="mr-1 h-4 w-4" />@{authorData.User_discord_username}</p>
+                            </div>
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-col gap-3">
-                            <Link to={`/module/${moduleData.Module_author_id}/download`}>
+                            <Link to={`/module/${moduleData.Module_id}/download`}>
+                                <p className="my-2 flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4" />Latest version: 1.9.3</p>
                                 <Button className="w-full"><ImDownload className="mr-2 h-4 w-4" />Download</Button>
                             </Link>
                             <Dialog open={openConfirmApproveModal} onOpenChange={setOpenConfirmApproveModal}>
@@ -92,6 +102,27 @@ export default function ModulePage() {
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>
+                            
+                            <p className="mt-4">Older versions</p>
+                            <div className="flex flex-col divide-y-2">
+                                <div className="py-2 bg-color-white flex justify-between">
+                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4" />1.9.1</p>
+                                    <Button variant={"outline"} size={"sm"}>Download</Button>
+                                </div>
+                                <div className="py-2 bg-color-white flex justify-between">
+                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4" />1.9.0</p>
+                                    <Button variant={"outline"} size={"sm"}>Download</Button>
+                                </div>
+                                <div className="py-2 bg-color-white flex justify-between">
+                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4" />1.8.9</p>
+                                    <Button variant={"outline"} size={"sm"}>Download</Button>
+                                </div>
+                                <div className="py-2 bg-color-white flex justify-between">
+                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4" />1.8.8</p>
+                                    <Button variant={"outline"} size={"sm"}>Download</Button>
+                                </div>
+                            </div>
+
                         </div>
                     </CardContent>
                 </Card>
