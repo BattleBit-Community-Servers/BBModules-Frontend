@@ -4,6 +4,7 @@ import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
 import {Navbar} from "../components/bb/nav/Navbar.tsx";
+import {Footer} from "../components/bb/footer/Footer.tsx";
 import {Slide, ToastContainer} from "react-toastify";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
                         <Route path={"/modules"} element={<ModuleListPage/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
+                    <Footer/>
                 </div>
             </BrowserRouter>
         </>
