@@ -3,10 +3,12 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} f
 import {Button} from "../../../components/ui/button.tsx";
 import {Input} from "../../../components/ui/input.tsx";
 import {Textarea} from "../../../components/ui/textarea.tsx";
+import {Alert, AlertDescription, AlertTitle} from "../../../components/ui/alert.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
 import {AiFillCheckCircle} from "react-icons/ai";
 import {BsDiscord} from "react-icons/bs";
+import {FaTerminal} from "react-icons/fa";
 import {SetStateAction, useState} from "react";
 import {toast} from "react-toastify";
 import {
@@ -26,6 +28,9 @@ export default function ModulePage() {
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
+
+    // Module rejected state
+    const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
 
     // Edit module states
     const [module_name, setModuleName] = useState(moduleData.Module_name);
@@ -53,6 +58,13 @@ export default function ModulePage() {
         setOpenConfirmApproveModal(false);
     };
 
+    // TODO: Implement denyModule to actually
+    // deny the module in the database
+    const denyModule = async () => {
+        setOpenConfirmApproveModal(false);
+        setModuleRejected(true);
+    };
+
     // TODO: Implement module edit mode
     const editModule = async (isEditing: boolean) => {
         setIsEditingModule(isEditing);
@@ -71,6 +83,13 @@ export default function ModulePage() {
             <div id="module-container" className="flex gap-4">
                 <div className="mb-4 w-9/12 flex flex-col gap-3">
                     <div className="flex flex-col gap-3">
+                        {moduleRejected ? <Alert variant={"destructive"} className={"text-red-700 border-red-700"}>
+                            <FaTerminal className="h-4 w-4" />
+                            <AlertTitle>Heads up!</AlertTitle>
+                            <AlertDescription>
+                                Your last module update was rejected. Please fix the issues and resubmit your module.
+                            </AlertDescription>
+                        </Alert> : null}
                         <Card key={moduleData.Module_id}>
                             <CardHeader>
                                 <div className="flex justify-between">
@@ -175,7 +194,7 @@ export default function ModulePage() {
                                                 <CardFooter>
                                                     <SheetClose asChild>
                                                         <Button type="submit"
-                                                                onClick={() => toast.promise(approveModule(), {
+                                                                onClick={() => toast.promise(denyModule(), {
                                                                     pending: "Denying module...",
                                                                     success: "Module denied!",
                                                                     error: "Failed to deny module!"

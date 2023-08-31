@@ -8,6 +8,7 @@ const mockModuleData = [
         Module_markdown: "## Sample Module 1\n\nThis is a sample module 1 content.",
         Module_created_at: "2023-08-28 12:00:00",
         Module_updated_at: "2023-08-28 12:00:00",
+        Module_rejected: true,
     },
     {
         Module_id: 2,
@@ -18,6 +19,7 @@ const mockModuleData = [
         Module_markdown: "## Sample Module 2\n\nThis is a sample module 2 content.",
         Module_created_at: "2023-08-29 10:30:00",
         Module_updated_at: "2023-08-29 10:30:00",
+        Module_rejected: false,
     },
     {
         Module_id: 3,
@@ -28,6 +30,7 @@ const mockModuleData = [
         Module_markdown: "## Sample Module 3\n\nThis is a sample module 3 content.",
         Module_created_at: "2023-08-30 14:45:00",
         Module_updated_at: "2023-08-30 14:45:00",
+        Module_rejected: false,
     },
     {
         Module_id: 4,
@@ -38,6 +41,7 @@ const mockModuleData = [
         Module_markdown: "## Sample Module 4\n\nThis is a sample module 4 content.",
         Module_created_at: "2023-08-31 08:20:00",
         Module_updated_at: "2023-08-31 08:20:00",
+        Module_rejected: false,
     },
     {
         Module_id: 5,
@@ -48,6 +52,7 @@ const mockModuleData = [
         Module_markdown: "## Sample Module 5\n\nThis is a sample module 5 content.",
         Module_created_at: "2023-09-01 16:10:00",
         Module_updated_at: "2023-09-01 16:10:00",
+        Module_rejected: false,
     },
 ];
 
