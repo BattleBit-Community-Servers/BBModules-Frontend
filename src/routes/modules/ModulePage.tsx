@@ -1,6 +1,8 @@
 import {mockModuleData, mockUserData} from "../../mockdata.ts";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
+import {Input} from "../../../components/ui/input.tsx";
+import {Textarea} from "../../../components/ui/textarea.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
 import {AiFillCheckCircle} from "react-icons/ai";
@@ -22,10 +24,44 @@ export default function ModulePage() {
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
     console.log(openConfirmApproveModal + "we dont want errrors")
 
+    const [isEditingModule, setIsEditingModule] = useState(false);
+
+    // Edit module states
+    const [module_name, setModuleName] = useState(moduleData.Module_name);
+    const [module_short_desc, setModuleShortDesc] = useState(moduleData.Module_shortdesc);
+    const [module_markdown, setModuleMarkdown] = useState(moduleData.Module_markdown);
+
+    const editModuleField = (e: any) => {
+        switch (e.target.name) {
+            case "module_name":
+                setModuleName(e.target.value);
+                break;
+            case "module_short_desc":
+                setModuleShortDesc(e.target.value);
+                break;
+            case "module_markdown":
+                setModuleMarkdown(e.target.value);
+                break;
+        }
+    };
+
     // TODO: Implement approveModule to actually
     // approve the module in the database
     const approveModule = async () => {
         setOpenConfirmApproveModal(false);
+    };
+
+    // TODO: Implement module edit mode
+    const editModule = async (isEditing: boolean) => {
+        setIsEditingModule(isEditing);
+    };
+
+    // TODO: Implement module save
+    const saveModule = async () => {
+        setIsEditingModule(false);
+        moduleData.Module_name = module_name;
+        moduleData.Module_shortdesc = module_short_desc;
+        moduleData.Module_markdown = module_markdown;
     };
 
     return (
@@ -35,8 +71,25 @@ export default function ModulePage() {
                     <div className="flex flex-col gap-3">
                         <Card key={moduleData.Module_id}>
                             <CardHeader>
-                                <CardTitle>{moduleData.Module_name}</CardTitle>
-                                <CardDescription>{moduleData.Module_shortdesc}</CardDescription>
+                                <div className="flex justify-between">
+                                    <div>
+                                        <CardTitle>
+                                            {isEditingModule ? <Input onChange={editModuleField} name="module_name" className="mb-1" defaultValue={moduleData.Module_name}/> : moduleData.Module_name}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            {isEditingModule ? <Input onChange={editModuleField} name="module_short_desc" defaultValue={moduleData.Module_shortdesc}/> : moduleData.Module_shortdesc}    
+                                        </CardDescription>
+                                    </div>
+                                    {isEditingModule ? 
+                                        <div className="flex gap-2">
+                                            <Button variant="destructive" className="ml-auto" onClick={() => editModule(false)}>Cancel</Button>
+                                            <Button variant="default" className="ml-auto" onClick={() => saveModule()}>Save</Button>
+                                        </div> 
+                                        :
+                                        <Button variant="outline" className="ml-auto" onClick={() => editModule(true)}>Edit</Button>
+                                    }
+                                    
+                                </div>
                             </CardHeader>
                             <CardContent>
                                 <div>Author ID: {moduleData.Module_author_id}</div>
@@ -44,6 +97,10 @@ export default function ModulePage() {
                                 <div>Created At: {moduleData.Module_created_at}</div>
                                 <div>Updated At: {moduleData.Module_updated_at}</div>
                                 <div>Markdown: {moduleData.Module_markdown}</div>
+                                <div className="mt-6">
+                                    <h2 className="text-2xl mb-4">Description</h2>
+                                    {isEditingModule ? <Textarea onChange={editModuleField} name="module_markdown" defaultValue={moduleData.Module_markdown}/> : moduleData.Module_markdown}
+                                </div>
                             </CardContent>
                         </Card>
 
