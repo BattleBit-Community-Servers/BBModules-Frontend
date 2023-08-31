@@ -7,7 +7,7 @@ import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
 import {AiFillCheckCircle} from "react-icons/ai";
 import {BsDiscord} from "react-icons/bs";
-import {useState} from "react";
+import {SetStateAction, useState} from "react";
 import {toast} from "react-toastify";
 import {
     Sheet, SheetClose,
@@ -24,6 +24,7 @@ export default function ModulePage() {
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
     console.log(openConfirmApproveModal + "we dont want errrors")
 
+    // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
 
     // Edit module states
@@ -31,7 +32,8 @@ export default function ModulePage() {
     const [module_short_desc, setModuleShortDesc] = useState(moduleData.Module_shortdesc);
     const [module_markdown, setModuleMarkdown] = useState(moduleData.Module_markdown);
 
-    const editModuleField = (e: any) => {
+    // Set module edit field states
+    const editModuleField = (e: { target: { name: string; value: SetStateAction<string>; }; }) => {
         switch (e.target.name) {
             case "module_name":
                 setModuleName(e.target.value);
