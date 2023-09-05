@@ -2,7 +2,7 @@ import {mockModuleData, mockUserData} from "../../mockdata.ts";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
 import {Input} from "../../../components/ui/input.tsx";
-import {Textarea} from "../../../components/ui/textarea.tsx";
+import MDEditor from '@uiw/react-md-editor';
 import {Alert, AlertDescription, AlertTitle} from "../../../components/ui/alert.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
@@ -17,6 +17,9 @@ import {
     SheetTrigger
 } from "../../../components/ui/sheet.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../../components/ui/tabs.tsx";
+import rehypeSanitize from "rehype-sanitize";
+import MarkdownPreview from '@uiw/react-markdown-preview';
+import {rehype} from "rehype";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
@@ -24,7 +27,7 @@ export default function ModulePage() {
     const authorData = mockUserData[moduleData.Module_author_id];
 
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
-    console.log(openConfirmApproveModal + "we dont want errrors")
+    console.log(openConfirmApproveModal + " we dont want errrors")
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
@@ -75,7 +78,7 @@ export default function ModulePage() {
         setIsEditingModule(false);
         moduleData.Module_name = module_name;
         moduleData.Module_shortdesc = module_short_desc;
-        moduleData.Module_markdown = module_markdown;
+        moduleData.Module_markdown = rehype().use(rehypeSanitize).processSync(module_markdown).toString();
     };
 
     return (
@@ -120,7 +123,24 @@ export default function ModulePage() {
                                 <div>Markdown: {moduleData.Module_markdown}</div>
                                 <div className="mt-6">
                                     <h2 className="text-2xl mb-4">Description</h2>
-                                    {isEditingModule ? <Textarea onChange={editModuleField} name="module_markdown" defaultValue={moduleData.Module_markdown}/> : moduleData.Module_markdown}
+                                    {
+                                        isEditingModule
+                                            ? <>
+                                                <MDEditor
+                                                    value={module_markdown}
+                                                    onChange={
+                                                        (value) => {
+                                                            console.log(value);
+                                                            setModuleMarkdown(value || "");
+                                                        }
+                                                    }
+                                                    previewOptions={{
+                                                        rehypePlugins: [[rehypeSanitize]],
+                                                    }}
+                                                />
+                                            </>
+                                            : <MarkdownPreview source={moduleData.Module_markdown}/>
+                                    }
                                 </div>
                             </CardContent>
                         </Card>
