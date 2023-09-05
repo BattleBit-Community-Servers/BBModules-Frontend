@@ -1,6 +1,7 @@
 import {
     LogOut,
-    Upload,
+    Settings,
+    User,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -34,8 +35,12 @@ export function UserDropdownMenu() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="cursor-pointer">
-                        <Upload className="mr-2 h-4 w-4" />
-                        <span>Upload module</span>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
