@@ -1,9 +1,21 @@
-import {mockModuleData, mockUserData} from "../../mockdata.ts";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
+import {mockModuleDetailData, mockUserData} from "../../mockdata.ts";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "../../../components/ui/card.tsx";
+import {History} from "lucide-react";
 import {Button} from "../../../components/ui/button.tsx";
 import {Input} from "../../../components/ui/input.tsx";
-import MDEditor from '@uiw/react-md-editor';
-import {Alert, AlertDescription, AlertTitle} from "../../../components/ui/alert.tsx";
+import MDEditor from "@uiw/react-md-editor";
+import {
+    Alert,
+    AlertDescription,
+    AlertTitle,
+} from "../../../components/ui/alert.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
 import {AiFillCheckCircle} from "react-icons/ai";
@@ -12,34 +24,46 @@ import {FaTerminal} from "react-icons/fa";
 import {SetStateAction, useState} from "react";
 import {toast} from "react-toastify";
 import {
-    Sheet, SheetClose,
+    Sheet,
+    SheetClose,
     SheetContent,
-    SheetTrigger
+    SheetTrigger,
 } from "../../../components/ui/sheet.tsx";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../../components/ui/tabs.tsx";
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "../../../components/ui/tabs.tsx";
 import rehypeSanitize from "rehype-sanitize";
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from "@uiw/react-markdown-preview";
 import {rehype} from "rehype";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
-    const moduleData = mockModuleData[parseInt(id) - 1];
-    const authorData = mockUserData[moduleData.Module_author_id];
+    const moduleData = mockModuleDetailData;
 
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
-    console.log(openConfirmApproveModal + " we dont want errrors")
+    console.log(openConfirmApproveModal + " we dont want errrors");
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
 
     // Module rejected state
-    const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
+    // const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
 
-    // Edit module states
-    const [module_markdown, setModuleMarkdown] = useState(moduleData.Module_markdown);
+    const [module_name, setModuleName] = useState(moduleData.Module_name);
+    const [module_short_desc, setModuleShortDesc] = useState(
+        moduleData.Module_shortdesc
+    );
+    const [module_markdown, setModuleMarkdown] = useState(
+        moduleData.Module_markdown
+    );
 
     // Set module edit field states
-    const editModuleField = (e: { target: { name: string; value: SetStateAction<string>; }; }) => {
+    const editModuleField = (e: {
+        target: { name: string; value: SetStateAction<string> };
+    }) => {
         switch (e.target.name) {
             case "module_markdown":
                 setModuleMarkdown(e.target.value);
@@ -57,7 +81,7 @@ export default function ModulePage() {
     // deny the module in the database
     const denyModule = async () => {
         setOpenConfirmApproveModal(false);
-        setModuleRejected(true);
+        // setModuleRejected(true);
     };
 
     // TODO: Implement module edit mode
@@ -68,69 +92,101 @@ export default function ModulePage() {
     // TODO: Implement module save
     const saveModule = async () => {
         setIsEditingModule(false);
-        moduleData.Module_markdown = rehype().use(rehypeSanitize).processSync(module_markdown).toString();
+        moduleData.Module_name = module_name;
+        moduleData.Module_shortdesc = module_short_desc;
+        moduleData.Module_markdown = rehype()
+            .use(rehypeSanitize)
+            .processSync(module_markdown)
+            .toString();
     };
+
+    const approvable = !moduleData.versions[0].Version_approved && mockUserData[Math.floor(Math.random() * mockUserData.length)].User_roles == "moderator";
+    const authorUnapproved =
+        moduleData.users.User_discord_id ==
+        mockUserData[Math.floor(Math.random() * mockUserData.length)]
+            .User_discord_id && !moduleData.versions[0].Version_approved;
 
     return (
         <>
             <div id="module-container" className="flex gap-4">
                 <div className="mb-4 w-9/12 flex flex-col gap-3">
                     <div className="flex flex-col gap-3">
-                        {moduleRejected ? <Alert variant={"destructive"} className={"text-red-700 border-red-700"}>
-                            <FaTerminal className="h-4 w-4" />
-                            <AlertTitle>Heads up!</AlertTitle>
-                            <AlertDescription>
-                                Your last module update was rejected. Please fix the issues and resubmit your module.
-                            </AlertDescription>
-                        </Alert> : null}
+                        {authorUnapproved ? (
+                            <Alert
+                                variant={"default"}
+                                className={"text-yellow-500 border-yellow-500"}
+                            >
+                                <AlertTitle>Heads up!</AlertTitle>
+                                <AlertDescription>
+                                    Your latest module version is still being reviewed and not
+                                    published yet.
+                                </AlertDescription>
+                            </Alert>
+                        ) : null}
                         <Card key={moduleData.Module_id}>
                             <CardHeader>
                                 <div className="flex justify-between">
                                     <div>
-                                        <CardTitle>
+                                        <CardTitle className="mb-2">
                                             {moduleData.Module_name}
                                         </CardTitle>
                                         <CardDescription>
-                                            {moduleData.Module_shortdesc}    
+                                            {moduleData.Module_shortdesc}
                                         </CardDescription>
                                     </div>
-                                    {isEditingModule ? 
+                                    {isEditingModule ? (
                                         <div className="flex gap-2">
-                                            <Button variant="destructive" className="ml-auto" onClick={() => editModule(false)}>Cancel</Button>
-                                            <Button variant="default" className="ml-auto" onClick={() => saveModule()}>Save</Button>
-                                        </div> 
-                                        :
-                                        <Button variant="outline" className="ml-auto" onClick={() => editModule(true)}>Edit</Button>
-                                    }
-                                    
+                                            <Button
+                                                variant="destructive"
+                                                className="ml-auto"
+                                                onClick={() => editModule(false)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                variant="default"
+                                                className="ml-auto"
+                                                onClick={() => saveModule()}
+                                            >
+                                                Save
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <Button
+                                            variant="outline"
+                                            className="ml-auto"
+                                            onClick={() => editModule(true)}
+                                        >
+                                            Edit
+                                        </Button>
+                                    )}
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <div>Author ID: {moduleData.Module_author_id}</div>
+                                {/* <div>Author ID: {moduleData.Module_author_id}</div>
                                 <div>Downloads: {moduleData.Module_downloads}</div>
                                 <div>Created At: {moduleData.Module_created_at}</div>
                                 <div>Updated At: {moduleData.Module_updated_at}</div>
-                                <div>Markdown: {moduleData.Module_markdown}</div>
-                                <div className="mt-6">
+                                <div>Markdown: {moduleData.Module_markdown}</div> */}
+                                <div>
                                     <h2 className="text-2xl mb-4">Description</h2>
-                                    {
-                                        isEditingModule
-                                            ? <>
-                                                <MDEditor
-                                                    value={module_markdown}
-                                                    onChange={
-                                                        (value) => {
-                                                            console.log(value);
-                                                            setModuleMarkdown(value || "");
-                                                        }
-                                                    }
-                                                    previewOptions={{
-                                                        rehypePlugins: [[rehypeSanitize]],
-                                                    }}
-                                                />
-                                            </>
-                                            : <MarkdownPreview source={moduleData.Module_markdown}/>
-                                    }
+                                    {isEditingModule ? (
+                                        <MDEditor
+                                            value={module_markdown}
+                                            onChange={(value) => {
+                                                console.log(value);
+                                                setModuleMarkdown(value || "");
+                                            }}
+                                            previewOptions={{
+                                                rehypePlugins: [[rehypeSanitize]],
+                                            }}
+                                        />
+                                    ) : (
+                                        <MarkdownPreview
+                                            className="bg-transparent"
+                                            source={moduleData.Module_markdown}
+                                        />
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
@@ -140,7 +196,46 @@ export default function ModulePage() {
                                 <CardTitle>Dependencies</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p>Dependencies go here</p>
+                                <div style={{display: "flex", flexDirection: "column"}}>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        <div style={{flex: 1}}>Type</div>
+                                        <div style={{flex: 1}}>Name</div>
+                                    </div>
+                                    {/* TODO: sort by type, binary first, then required, then optional */}
+                                    {moduleData.dependencies.map((dependency) => (
+                                        <div style={{display: "flex", flexDirection: "row"}}>
+                                            <div style={{flex: 1}}>
+                                                {dependency.Dependency_type[0].toLocaleUpperCase()}
+                                                {dependency.Dependency_type.slice(1)}
+                                            </div>
+                                            <div style={{flex: 1}}>
+                                                {dependency.Dependency_type == "binary" ? (
+                                                    rehype()
+                                                        .use(rehypeSanitize)
+                                                        .processSync(
+                                                            dependency.Dependency_binary_text?.toString()
+                                                        )
+                                                        .toString()
+                                                ) : (
+                                                    <>
+                                                        {dependency.Dependency_module_name}
+                                                        <Link
+                                                            to={`/module/${dependency.Dependency_module_name}`}
+                                                        >
+                                                            <Button variant="outline">View</Button>
+                                                        </Link>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
@@ -148,102 +243,119 @@ export default function ModulePage() {
                 <Card className="w-3/12 flex flex-col gap-3">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <img width={50} src={authorData.User_profile_picture}/>
                             <div className="flex flex-col">
-                                <p>{authorData.User_displayname}</p>
-                                <p className="text-sm mt-1 flex items-center"><BsDiscord
-                                    className="mr-1 h-4 w-4"/>@{authorData.User_discord_username}</p>
+                                <p>{moduleData.users.User_displayname}</p>
+                                <p className="text-sm mt-1 flex items-center">
+                                    <BsDiscord className="mr-1 h-4 w-4"/>@
+                                    {moduleData.users.User_displayname}
+                                </p>
                             </div>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-col gap-3">
-                            <Link to={`/module/${moduleData.Module_id}/download`}>
-                                <p className="my-2 flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4"/>Latest
-                                    version: 1.9.3</p>
-                                <Button className="w-full"><ImDownload className="mr-2 h-4 w-4"/>Download</Button>
+                            {/* TODO: link to backend */}
+                            <p className="my-2 flex items-center">
+                                <History className="mr-2 h-4 w-4"/>
+                                Latest
+                                version: {moduleData.versions.filter((version) => version.Version_approved != approvable || authorUnapproved)[0].Version_v_number}
+                            </p>
+                            <Link to={`//backend/Download/${moduleData.Module_name}/latest`}>
+                                <Button className="w-full">
+                                    <ImDownload className="mr-2 h-4 w-4"/> Download
+                                </Button>
                             </Link>
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button variant="outline">Review</Button>
-                                </SheetTrigger>
-                                <SheetContent>
-                                    <Tabs defaultValue="deny" className="w-full">
-                                        <TabsList className="grid w-full grid-cols-2">
-                                            <TabsTrigger value="approve">Approve</TabsTrigger>
-                                            <TabsTrigger value="deny">Deny</TabsTrigger>
-                                        </TabsList>
-                                        <TabsContent value="approve">
-                                            <Card>
-                                                <CardHeader>
-                                                    <CardTitle>Approve Module</CardTitle>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <p>Approve module content goes here</p>
-                                                </CardContent>
-                                                <CardFooter>
-                                                    <SheetClose asChild>
-                                                        <Button type="submit"
-                                                                onClick={() => toast.promise(approveModule(), {
-                                                                    pending: "Approving module...",
-                                                                    success: "Module approved!",
-                                                                    error: "Failed to approve module!"
-                                                                })}>Approve</Button>
-                                                    </SheetClose>
-                                                </CardFooter>
-                                            </Card>
-                                        </TabsContent>
-                                        <TabsContent value="deny">
-                                            <Card>
-                                                <CardHeader>
-                                                    <CardTitle>Deny Module</CardTitle>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <p>Deny module content goes here</p>
-                                                </CardContent>
-                                                <CardFooter>
-                                                    <SheetClose asChild>
-                                                        <Button type="submit"
-                                                                onClick={() => toast.promise(denyModule(), {
-                                                                    pending: "Denying module...",
-                                                                    success: "Module denied!",
-                                                                    error: "Failed to deny module!"
-                                                                })}>Deny</Button>
-                                                    </SheetClose>
-                                                </CardFooter>
-                                            </Card>
-                                        </TabsContent>
-                                    </Tabs>
-                                </SheetContent>
-                            </Sheet>
+                            {approvable ? (
+                                <Sheet>
+                                    <SheetTrigger asChild>
+                                        <Button variant="outline">Review</Button>
+                                    </SheetTrigger>
+                                    <SheetContent>
+                                        <Tabs defaultValue="deny" className="w-full">
+                                            <TabsList className="grid w-full grid-cols-2">
+                                                <TabsTrigger value="approve">Approve</TabsTrigger>
+                                                <TabsTrigger value="deny">Deny</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="approve">
+                                                <Card>
+                                                    <CardHeader>
+                                                        <CardTitle>Approve Module</CardTitle>
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <p>Approve module content goes here</p>
+                                                    </CardContent>
+                                                    <CardFooter>
+                                                        <SheetClose asChild>
+                                                            <Button
+                                                                type="submit"
+                                                                onClick={() =>
+                                                                    toast.promise(approveModule(), {
+                                                                        pending: "Approving module...",
+                                                                        success: "Module approved!",
+                                                                        error: "Failed to approve module!",
+                                                                    })
+                                                                }
+                                                            >
+                                                                Approve
+                                                            </Button>
+                                                        </SheetClose>
+                                                    </CardFooter>
+                                                </Card>
+                                            </TabsContent>
+                                            <TabsContent value="deny">
+                                                <Card>
+                                                    <CardHeader>
+                                                        <CardTitle>Deny Module</CardTitle>
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <p>Deny module content goes here</p>
+                                                    </CardContent>
+                                                    <CardFooter>
+                                                        <SheetClose asChild>
+                                                            <Button
+                                                                type="submit"
+                                                                onClick={() =>
+                                                                    toast.promise(denyModule(), {
+                                                                        pending: "Denying module...",
+                                                                        success: "Module denied!",
+                                                                        error: "Failed to deny module!",
+                                                                    })
+                                                                    //   TODO: make toast of denial yellow
+                                                                }
+                                                            >
+                                                                Deny
+                                                            </Button>
+                                                        </SheetClose>
+                                                    </CardFooter>
+                                                </Card>
+                                            </TabsContent>
+                                        </Tabs>
+                                    </SheetContent>
+                                </Sheet>
+                            ) : null}
                             <p className="mt-4">Older versions</p>
                             <div className="flex flex-col divide-y-2">
-                                <div className="py-2 bg-color-white flex justify-between">
-                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4"/>1.9.1
-                                    </p>
-                                    <Button variant={"outline"} size={"sm"}>Download</Button>
-                                </div>
-                                <div className="py-2 bg-color-white flex justify-between">
-                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4"/>1.9.0
-                                    </p>
-                                    <Button variant={"outline"} size={"sm"}>Download</Button>
-                                </div>
-                                <div className="py-2 bg-color-white flex justify-between">
-                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4"/>1.8.9
-                                    </p>
-                                    <Button variant={"outline"} size={"sm"}>Download</Button>
-                                </div>
-                                <div className="py-2 bg-color-white flex justify-between">
-                                    <p className="flex items-center"><AiFillCheckCircle className="mr-2 h-4 w-4"/>1.8.8
-                                    </p>
-                                    <Button variant={"outline"} size={"sm"}>Download</Button>
-                                </div>
+                                {moduleData.versions.filter((version) => version.Version_approved || approvable || authorUnapproved).map((version) => (
+                                    <div className="py-2 bg-color-white flex justify-between">
+                                        <p className="flex items-center">
+                                            <History className="mr-2 h-4 w-4"/>
+                                            {version.Version_v_number}
+                                        </p>
+                                        {/* TODO: link to backend */}
+                                        <Link
+                                            to={`//backend/Download/${moduleData.Module_name}/${version.Version_v_number}`}
+                                        >
+                                            <Button variant={"outline"} size={"sm"}>
+                                                Download
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </CardContent>
                 </Card>
             </div>
         </>
-    )
-        ;
+    );
 }

@@ -1,8 +1,16 @@
 import {mockModuleData, mockUserData} from "../../mockdata.ts";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../../components/ui/card.tsx";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {Avatar} from "../../../components/ui/avatar.tsx";
+import {BsDiscord} from "react-icons/bs";
 
 export default function ModuleListPage() {
     const users = mockUserData;
@@ -13,27 +21,24 @@ export default function ModuleListPage() {
                 {mockModuleData.map((module) => (
                     <Card key={module.Module_id}>
                         <CardHeader>
-                            <CardTitle>{module.Module_name}</CardTitle>
+                            <CardTitle>
+                                <Link to={`/module/${module.Module_id}`}>
+                                    {module.Module_name}
+                                </Link>
+                            </CardTitle>
                             <CardDescription>{module.Module_shortdesc}</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex flex-row items-center justify-between gap-2">
-                            <div>
-                                <p>Downloads: {module.Module_downloads}</p>
-                                <p>Id: {module.Module_id}</p>
-                            </div>
-                        </CardContent>
                         <CardFooter className="flex justify-between">
-                            <div className="flex items-center gap-2">
-                                <Avatar className="cursor-pointer">
-                                    <img src={users[module.Module_author_id].User_profile_picture} alt="User Profile Picture"/>
-                                </Avatar>
-                                {users[module.Module_author_id].User_displayname}
+                            <div className="flex items-center gap-2 mr-2">
+                                <BsDiscord className="mr-1 h-4 w-4"/>@
+                                {module.users.User_displayname}
                             </div>
                             <div className="flex gap-2">
                                 <Link to={`/module/${module.Module_id}`}>
                                     <Button variant="outline">View</Button>
                                 </Link>
-                                <Button>Download</Button>
+                                {/* TODO: only show latest version for either author or moderators if latest version is not approved, otherwise show the latest version that is approved */}
+                                <Button>Download {module.versions.filter((version) => true)[0].Version_v_number}</Button>
                             </div>
                         </CardFooter>
                     </Card>
