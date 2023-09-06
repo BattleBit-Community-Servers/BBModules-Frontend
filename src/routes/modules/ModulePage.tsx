@@ -52,7 +52,6 @@ export default function ModulePage() {
     // Module rejected state
     // const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
 
-    // Edit module states
     const [module_name, setModuleName] = useState(moduleData.Module_name);
     const [module_short_desc, setModuleShortDesc] = useState(
         moduleData.Module_shortdesc
@@ -66,12 +65,6 @@ export default function ModulePage() {
         target: { name: string; value: SetStateAction<string> };
     }) => {
         switch (e.target.name) {
-            case "module_name":
-                setModuleName(e.target.value);
-                break;
-            case "module_short_desc":
-                setModuleShortDesc(e.target.value);
-                break;
             case "module_markdown":
                 setModuleMarkdown(e.target.value);
                 break;
