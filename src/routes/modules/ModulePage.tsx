@@ -36,19 +36,11 @@ export default function ModulePage() {
     const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
 
     // Edit module states
-    const [module_name, setModuleName] = useState(moduleData.Module_name);
-    const [module_short_desc, setModuleShortDesc] = useState(moduleData.Module_shortdesc);
     const [module_markdown, setModuleMarkdown] = useState(moduleData.Module_markdown);
 
     // Set module edit field states
     const editModuleField = (e: { target: { name: string; value: SetStateAction<string>; }; }) => {
         switch (e.target.name) {
-            case "module_name":
-                setModuleName(e.target.value);
-                break;
-            case "module_short_desc":
-                setModuleShortDesc(e.target.value);
-                break;
             case "module_markdown":
                 setModuleMarkdown(e.target.value);
                 break;
@@ -76,8 +68,6 @@ export default function ModulePage() {
     // TODO: Implement module save
     const saveModule = async () => {
         setIsEditingModule(false);
-        moduleData.Module_name = module_name;
-        moduleData.Module_shortdesc = module_short_desc;
         moduleData.Module_markdown = rehype().use(rehypeSanitize).processSync(module_markdown).toString();
     };
 
@@ -98,10 +88,10 @@ export default function ModulePage() {
                                 <div className="flex justify-between">
                                     <div>
                                         <CardTitle>
-                                            {isEditingModule ? <Input onChange={editModuleField} name="module_name" className="mb-1" defaultValue={moduleData.Module_name}/> : moduleData.Module_name}
+                                            {moduleData.Module_name}
                                         </CardTitle>
                                         <CardDescription>
-                                            {isEditingModule ? <Input onChange={editModuleField} name="module_short_desc" defaultValue={moduleData.Module_shortdesc}/> : moduleData.Module_shortdesc}    
+                                            {moduleData.Module_shortdesc}    
                                         </CardDescription>
                                     </div>
                                     {isEditingModule ? 
