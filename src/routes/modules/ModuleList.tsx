@@ -1,7 +1,5 @@
-import {mockModuleData, mockUserData} from "../../mockdata.ts";
 import {
     Card,
-    CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
@@ -9,16 +7,45 @@ import {
 } from "../../../components/ui/card.tsx";
 import {Button} from "../../../components/ui/button.tsx";
 import {Link} from "react-router-dom";
-import {Avatar} from "../../../components/ui/avatar.tsx";
 import {BsDiscord} from "react-icons/bs";
+import {getModules} from "../../../api/modules.tsx";
+import { useEffect, useState } from "react";
+import { ModuleData } from "../../../api/modules.types";
 
 export default function ModuleListPage() {
-    const users = mockUserData;
+
+    // Modules
+    const [modules, setModules] = useState([]);
+
+    // Is loading
+    const [loading, setLoading] = useState(true);
+
+    // Error
+    const [error, setError] = useState(null);
+
+    // Page
+    const [modulesPage, setModulesPage] = useState(1);
+
+    // Get all modules
+    useEffect(() => {
+        const fetchModules = async () => {
+            try {
+                const modules = await getModules(modulesPage);  // wait for Promise to resolve
+                console.log(modules);
+                setModules(modules);
+            } catch (err) {
+                console.log('Error:', err);
+            }
+        };
+    
+        fetchModules();
+    }, [modulesPage]);
+
     return (
         <>
             <h1 className="text-4xl font-bold mb-3">Modules</h1>
             <div className="grid grid-cols-3 gap-3">
-                {mockModuleData.map((module) => (
+                {modules.map((module: ModuleData) => (
                     <Card key={module.Module_id}>
                         <CardHeader>
                             <CardTitle>
@@ -38,7 +65,7 @@ export default function ModuleListPage() {
                                     <Button variant="outline">View</Button>
                                 </Link>
                                 {/* TODO: only show latest version for either author or moderators if latest version is not approved, otherwise show the latest version that is approved */}
-                                <Button>Download {module.versions.filter((version) => true)[0].Version_v_number}</Button>
+                                <Button>Download v{module.versions[0].Version_v_number}</Button>
                             </div>
                         </CardFooter>
                     </Card>

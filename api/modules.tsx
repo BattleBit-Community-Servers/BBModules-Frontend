@@ -10,7 +10,7 @@ export async function getModules(page: number) {
     }
 }
 
-export async function getModule(id: string) {
+export async function getModule(id: number) {
     try {
       const response = await fetch(`${apiUrl}/Modules/GetModule/${id}`);
       const data = await response.json();

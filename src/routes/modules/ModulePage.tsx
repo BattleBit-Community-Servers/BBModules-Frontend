@@ -21,7 +21,7 @@ import {ImDownload} from "react-icons/im";
 import {AiFillCheckCircle} from "react-icons/ai";
 import {BsDiscord} from "react-icons/bs";
 import {FaTerminal} from "react-icons/fa";
-import {SetStateAction, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {
     Sheet,
@@ -38,10 +38,36 @@ import {
 import rehypeSanitize from "rehype-sanitize";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import {rehype} from "rehype";
+import { getModule } from "../../../api/modules.tsx";
+import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
     const moduleData = mockModuleDetailData;
+
+    // Modules
+    const [module, setModule] = useState<ModuleData>();
+
+    // Is loading
+    const [loading, setLoading] = useState(true);
+
+    // Error
+    const [error, setError] = useState(null);
+
+    // Get all modules
+    useEffect(() => {
+        const fetchModules = async () => {
+            try {
+                const module = await getModule(parseInt(id));  // wait for Promise to resolve
+                console.log(module);
+                setModule(module);
+            } catch (err) {
+                console.log('Error:', err);
+            }
+        };
+    
+        fetchModules();
+    }, [id]);
 
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
     console.log(openConfirmApproveModal + " we dont want errrors");
@@ -51,11 +77,8 @@ export default function ModulePage() {
 
     // Module rejected state
     // const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
-
-    const [module_name, setModuleName] = useState(moduleData.Module_name);
-    const [module_short_desc, setModuleShortDesc] = useState(
-        moduleData.Module_shortdesc
-    );
+    
+    // Module markdown state
     const [module_markdown, setModuleMarkdown] = useState(
         moduleData.Module_markdown
     );
@@ -92,19 +115,20 @@ export default function ModulePage() {
     // TODO: Implement module save
     const saveModule = async () => {
         setIsEditingModule(false);
-        moduleData.Module_name = module_name;
-        moduleData.Module_shortdesc = module_short_desc;
         moduleData.Module_markdown = rehype()
             .use(rehypeSanitize)
             .processSync(module_markdown)
             .toString();
     };
 
-    const approvable = !moduleData.versions[0].Version_approved && mockUserData[Math.floor(Math.random() * mockUserData.length)].User_roles == "moderator";
-    const authorUnapproved =
-        moduleData.users.User_discord_id ==
-        mockUserData[Math.floor(Math.random() * mockUserData.length)]
-            .User_discord_id && !moduleData.versions[0].Version_approved;
+    // const approvable = !moduleData.versions[0].Version_approved && mockUserData[Math.floor(Math.random() * mockUserData.length)].User_roles == "moderator";
+    // const authorUnapproved =
+    //     moduleData.users.User_discord_id ==
+    //     mockUserData[Math.floor(Math.random() * mockUserData.length)]
+    //         .User_discord_id && !moduleData.versions[0].Version_approved;
+
+    const approvable = true;
+    const authorUnapproved = false;
 
     return (
         <>
@@ -123,15 +147,15 @@ export default function ModulePage() {
                                 </AlertDescription>
                             </Alert>
                         ) : null}
-                        <Card key={moduleData.Module_id}>
+                        <Card key={module?.Module_id}>
                             <CardHeader>
                                 <div className="flex justify-between">
                                     <div>
                                         <CardTitle className="mb-2">
-                                            {moduleData.Module_name}
+                                            {module?.Module_name}
                                         </CardTitle>
                                         <CardDescription>
-                                            {moduleData.Module_shortdesc}
+                                            {module?.Module_shortdesc}
                                         </CardDescription>
                                     </div>
                                     {isEditingModule ? (
@@ -184,7 +208,7 @@ export default function ModulePage() {
                                     ) : (
                                         <MarkdownPreview
                                             className="bg-transparent"
-                                            source={moduleData.Module_markdown}
+                                            source={module?.Module_markdown}
                                         />
                                     )}
                                 </div>
@@ -208,7 +232,7 @@ export default function ModulePage() {
                                         <div style={{flex: 1}}>Name</div>
                                     </div>
                                     {/* TODO: sort by type, binary first, then required, then optional */}
-                                    {moduleData.dependencies.map((dependency) => (
+                                    {/* {module?.dependencies.map((dependency: Dependencies) => (
                                         <div style={{display: "flex", flexDirection: "row"}}>
                                             <div style={{flex: 1}}>
                                                 {dependency.Dependency_type[0].toLocaleUpperCase()}
@@ -219,14 +243,14 @@ export default function ModulePage() {
                                                     rehype()
                                                         .use(rehypeSanitize)
                                                         .processSync(
-                                                            dependency.Dependency_binary_text?.toString()
+                                                            dependency.Dependency_text?.toString()
                                                         )
                                                         .toString()
                                                 ) : (
                                                     <>
-                                                        {dependency.Dependency_module_name}
+                                                        {dependency.Dependency_name}
                                                         <Link
-                                                            to={`/module/${dependency.Dependency_module_name}`}
+                                                            to={`/module/${dependency.Dependency_name}`}
                                                         >
                                                             <Button variant="outline">View</Button>
                                                         </Link>
@@ -234,7 +258,7 @@ export default function ModulePage() {
                                                 )}
                                             </div>
                                         </div>
-                                    ))}
+                                    ))} */}
                                 </div>
                             </CardContent>
                         </Card>
@@ -244,10 +268,10 @@ export default function ModulePage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <div className="flex flex-col">
-                                <p>{moduleData.users.User_displayname}</p>
+                                <p>{module?.users.User_displayname}</p>
                                 <p className="text-sm mt-1 flex items-center">
                                     <BsDiscord className="mr-1 h-4 w-4"/>@
-                                    {moduleData.users.User_displayname}
+                                    {module?.users.User_displayname}
                                 </p>
                             </div>
                         </CardTitle>
@@ -257,10 +281,10 @@ export default function ModulePage() {
                             {/* TODO: link to backend */}
                             <p className="my-2 flex items-center">
                                 <History className="mr-2 h-4 w-4"/>
-                                Latest
-                                version: {moduleData.versions.filter((version) => version.Version_approved != approvable || authorUnapproved)[0].Version_v_number}
+                                Latest version: {module?.versions[0].Version_v_number}
+                                {/* version: {module?.versions.filter((version) => version.Version_approved != approvable || authorUnapproved)[0].Version_v_number} */}
                             </p>
-                            <Link to={`//backend/Download/${moduleData.Module_name}/latest`}>
+                            <Link to={`//backend/Download/${module?.Module_name}/latest`}>
                                 <Button className="w-full">
                                     <ImDownload className="mr-2 h-4 w-4"/> Download
                                 </Button>
@@ -335,7 +359,7 @@ export default function ModulePage() {
                             ) : null}
                             <p className="mt-4">Older versions</p>
                             <div className="flex flex-col divide-y-2">
-                                {moduleData.versions.filter((version) => version.Version_approved || approvable || authorUnapproved).map((version) => (
+                                {module?.versions.filter((version) => version.Version_approved || approvable || authorUnapproved).map((version) => (
                                     <div className="py-2 bg-color-white flex justify-between">
                                         <p className="flex items-center">
                                             <History className="mr-2 h-4 w-4"/>
@@ -343,7 +367,7 @@ export default function ModulePage() {
                                         </p>
                                         {/* TODO: link to backend */}
                                         <Link
-                                            to={`//backend/Download/${moduleData.Module_name}/${version.Version_v_number}`}
+                                            to={`//backend/Download/${module?.Module_name}/${version.Version_v_number}`}
                                         >
                                             <Button variant={"outline"} size={"sm"}>
                                                 Download

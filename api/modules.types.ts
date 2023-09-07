@@ -9,7 +9,7 @@ type Versions = {
   Version_approved: boolean;
 };
 
-type Dependencies = {
+export type Dependencies = {
   Dependency_id: number;
   Dependency_version_id: number;
   Dependency_name: string;
