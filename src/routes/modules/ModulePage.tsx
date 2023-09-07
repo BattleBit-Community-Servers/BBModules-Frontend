@@ -342,7 +342,7 @@ export default function ModulePage() {
                             ) : null}
                             <p className="mt-4">Older versions</p>
                             <div className="flex flex-col divide-y-2">
-                                {module?.versions.filter((version) => version.Version_approved || approvable || authorUnapproved).map((version) => (
+                                {(module?.versions.length ?? 0) > 1 ? module?.versions.splice(1).map((version) => (
                                     <div className="py-2 bg-color-white flex justify-between">
                                         <p className="flex items-center">
                                             <History className="mr-2 h-4 w-4"/>
@@ -357,7 +357,7 @@ export default function ModulePage() {
                                             </Button>
                                         </Link>
                                     </div>
-                                ))}
+                                )) : "None"}
                             </div>
                         </div>
                     </CardContent>
