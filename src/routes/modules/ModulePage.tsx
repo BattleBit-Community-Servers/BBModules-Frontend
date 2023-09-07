@@ -112,21 +112,14 @@ export default function ModulePage() {
         );
     };
 
-    // const approvable = !moduleData.versions[0].Version_approved && mockUserData[Math.floor(Math.random() * mockUserData.length)].User_roles == "moderator";
-    // const authorUnapproved =
-    //     moduleData.users.User_discord_id ==
-    //     mockUserData[Math.floor(Math.random() * mockUserData.length)]
-    //         .User_discord_id && !moduleData.versions[0].Version_approved;
-
-    const approvable = true;
-    const authorUnapproved = false;
+    const approvable = true; // TODO: approvable = user is moderator
 
     return (
         <>
             <div id="module-container" className="flex gap-4">
                 <div className="mb-4 w-9/12 flex flex-col gap-3">
                     <div className="flex flex-col gap-3">
-                        {authorUnapproved ? (
+                        {!(module?.versions[0].Version_approved ?? true) ? (
                             <Alert
                                 variant={"default"}
                                 className={"text-yellow-500 border-yellow-500"}
