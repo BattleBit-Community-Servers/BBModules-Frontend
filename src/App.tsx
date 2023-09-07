@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Home from "./routes/Home.tsx";
 import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
@@ -27,7 +27,7 @@ export default function App() {
                 <div className="max-w-6xl mx-auto">
                     <Navbar/>
                     <Routes>
-                        <Route path="/" element={<Home/>}/>
+                        <Route path="/" element={<Navigate to="/modules" replace />}/>
                         <Route path={"/module/:id"} element={<ModulePage/>}/>
                         <Route path={"/modules"} element={<ModuleListPage/>}/>
                         <Route path="*" element={<NotFound/>}/>
