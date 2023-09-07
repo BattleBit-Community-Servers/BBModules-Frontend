@@ -61,6 +61,7 @@ export default function ModulePage() {
                 const module = await getModule(parseInt(id));  // wait for Promise to resolve
                 console.log(module);
                 setModule(module);
+                setModuleMarkdown(module.Module_markdown);
             } catch (err) {
                 console.log('Error:', err);
             }
@@ -70,7 +71,6 @@ export default function ModulePage() {
     }, [id]);
 
     const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
-    console.log(openConfirmApproveModal + " we dont want errrors");
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
@@ -80,7 +80,7 @@ export default function ModulePage() {
     
     // Module markdown state
     const [module_markdown, setModuleMarkdown] = useState(
-        moduleData.Module_markdown
+        module?.Module_markdown
     );
 
     // TODO: Implement approveModule to actually
