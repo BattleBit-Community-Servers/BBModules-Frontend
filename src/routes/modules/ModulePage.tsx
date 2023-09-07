@@ -83,17 +83,6 @@ export default function ModulePage() {
         moduleData.Module_markdown
     );
 
-    // Set module edit field states
-    const editModuleField = (e: {
-        target: { name: string; value: SetStateAction<string> };
-    }) => {
-        switch (e.target.name) {
-            case "module_markdown":
-                setModuleMarkdown(e.target.value);
-                break;
-        }
-    };
-
     // TODO: Implement approveModule to actually
     // approve the module in the database
     const approveModule = async () => {
@@ -115,10 +104,12 @@ export default function ModulePage() {
     // TODO: Implement module save
     const saveModule = async () => {
         setIsEditingModule(false);
-        moduleData.Module_markdown = rehype()
+        setModuleMarkdown(
+            rehype()
             .use(rehypeSanitize)
             .processSync(module_markdown)
-            .toString();
+            .toString()
+        );
     };
 
     // const approvable = !moduleData.versions[0].Version_approved && mockUserData[Math.floor(Math.random() * mockUserData.length)].User_roles == "moderator";
@@ -208,7 +199,7 @@ export default function ModulePage() {
                                     ) : (
                                         <MarkdownPreview
                                             className="bg-transparent"
-                                            source={module?.Module_markdown}
+                                            source={module_markdown}
                                         />
                                     )}
                                 </div>
