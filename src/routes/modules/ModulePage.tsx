@@ -263,10 +263,9 @@ export default function ModulePage() {
                     <CardContent>
                         <div className="flex flex-col gap-3">
                             {/* TODO: link to backend */}
-                            <p className="my-2 flex items-center">
+                            <p className={`my-2 flex items-center ${!(module?.versions[0].Version_approved ?? true) ? "text-yellow-500" : ""}`}>
                                 <History className="mr-2 h-4 w-4"/>
                                 Latest version: {module?.versions[0].Version_v_number}
-                                {/* version: {module?.versions.filter((version) => version.Version_approved != approvable || authorUnapproved)[0].Version_v_number} */}
                             </p>
                             <Link to={`//backend/Download/${module?.Module_name}/latest`}>
                                 <Button className="w-full">
