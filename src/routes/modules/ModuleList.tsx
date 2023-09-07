@@ -64,8 +64,7 @@ export default function ModuleListPage() {
                                 <Link to={`/module/${module.Module_id}`}>
                                     <Button variant="outline">View</Button>
                                 </Link>
-                                {/* TODO: only show latest version for either author or moderators if latest version is not approved, otherwise show the latest version that is approved */}
-                                <Button>Download v{module.versions[0].Version_v_number}</Button>
+                                <Button variant={!module.versions[0].Version_approved ? "destructive" : "default"}>Download v{module.versions[0].Version_v_number}</Button>
                             </div>
                         </CardFooter>
                     </Card>
