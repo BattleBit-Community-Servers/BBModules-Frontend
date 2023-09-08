@@ -2,7 +2,7 @@ const apiUrl = "https://apirunner.mevng.net";
 
 export async function getModules(page: number) {
     try {
-      const response = await fetch(`${apiUrl}/Modules/GetModules/${page}`);
+      const response = await fetch(`${apiUrl}/Modules/GetModules?page=${page}`);
       const data = await response.json();
       return data;
     } catch (error) {
