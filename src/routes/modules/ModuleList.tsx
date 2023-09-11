@@ -12,6 +12,7 @@ import {getModules} from "../../../api/modules.tsx";
 import { useEffect, useState } from "react";
 import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
 import { Input } from "../../../components/ui/input.tsx";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 
 export default function ModuleListPage() {
 
@@ -158,45 +159,51 @@ export default function ModuleListPage() {
                     </Card>
                 ))}
             </div>
-            { modules?.count > 1 && (
-                <div className="mt-3 flex justify-center">
-                    <Button
-                        onClick={goToFirstPage}
-                        disabled={modulesPage === 1}
-                        className="mr-2"
-                    >
-                        First
-                    </Button>
-                    <Button
-                        onClick={goToPreviousPage}
-                        disabled={modulesPage === 1}
-                        className="mr-2"
-                    >
-                        Previous
-                    </Button>
-                    {Array.from({ length: modules?.count ?? 1 }, (_, index) => (
+            { modules?.count > 1 && (<>
+                <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
+                    <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                        Page {modulesPage} of {modules.count}
+                    </div>
+                    <div className="flex items-center space-x-2">
                         <Button
-                        key={index}
-                        onClick={() => goToPage(index + 1)}
-                        className={`mr-2 ${modulesPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+                        variant="outline"
+                        className="hidden h-8 w-8 p-0 lg:flex"
+                        onClick={() => goToFirstPage()}
+                        disabled={modulesPage === 1}
                         >
-                        {index + 1}
+                        <span className="sr-only">Go to first page</span>
+                        <ChevronsLeftIcon className="h-4 w-4" />
                         </Button>
-                    ))}
-                    <Button
-                        onClick={goToNextPage}
-                        disabled={modulesPage === modules?.count ?? 1}
-                        className="mr-2"
-                    >
-                        Next
-                    </Button>
-                    <Button
-                        onClick={goToLastPage}
-                        disabled={modulesPage === modules?.count ?? 1}
-                    >
-                        Last
-                    </Button>
+                        <Button
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        onClick={() => goToPreviousPage()}
+                        disabled={modulesPage === 1}
+                        >
+                        <span className="sr-only">Go to previous page</span>
+                        <ChevronLeftIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        onClick={() => goToNextPage()}
+                        disabled={modulesPage === modules.count}
+                        >
+                        <span className="sr-only">Go to next page</span>
+                        <ChevronRightIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                        variant="outline"
+                        className="hidden h-8 w-8 p-0 lg:flex"
+                        onClick={() => goToLastPage()}
+                        disabled={modulesPage === modules.count}
+                        >
+                        <span className="sr-only">Go to last page</span>
+                        <ChevronsRightIcon className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </div>
+            </>
             )}
         </>
     );
