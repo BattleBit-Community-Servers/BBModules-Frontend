@@ -9,7 +9,7 @@ import {Button} from "../../../components/ui/button.tsx";
 import {Link} from "react-router-dom";
 import {BsDiscord} from "react-icons/bs";
 import {getModules} from "../../../api/modules.tsx";
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
 import { Input } from "../../../components/ui/input.tsx";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
@@ -35,48 +35,13 @@ export default function ModuleListPage() {
     const [lastSearchTerm, setLastSearchTerm] = useState("");
     const [searchTooShort, setSearchTooShort] = useState(false);
 
-    useEffect(() => {
-        if (modulesPage !== 1) {
-            goToFirstPage();
-        } else {
-            fetchModules();
-        }
-    }, [lastSearchTerm]);
-
-    const fetchModules = async () => {
-        // Prevents a flash of loading state/error when loading/error is fast
-        const timeout = setTimeout(() => {
-            setError(null);
-            setLoading(true);
-        }, 500);
-
-        try {
-            const modules = await getModules(modulesPage, lastSearchTerm);
-            console.log(modules);
-            setModules(modules);
-            setError(null);
-            clearTimeout(timeout);
-        } catch (err) {
-            console.log(err);
-            setError("Failed to load modules from API.");
-            setModules({ count: 0, results: []} as FilteredModuleList);
-        }
-
-        setLoading(false);
-    };
-
-    // Get all modules
-    useEffect(() => {
-        fetchModules();
-    }, [modulesPage]);
-
-    const goToPage = (page : number) => {
+    const goToPage = useCallback((page : number) => {
         setModulesPage(page);
-    };
+    }, []);
 
-    const goToFirstPage = () => {
+    const goToFirstPage = useCallback(() => {
         goToPage(1);
-    };
+    }, [goToPage]);
 
     const goToLastPage = () => {
         goToPage(modules?.count ?? 1);
@@ -84,7 +49,7 @@ export default function ModuleListPage() {
 
     const goToNextPage = () => {
         if (modulesPage < modules?.count ?? 1) {
-         goToPage(modulesPage + 1);
+            goToPage(modulesPage + 1);
         }
     };
 
@@ -93,6 +58,33 @@ export default function ModuleListPage() {
             goToPage(modulesPage - 1);
         }
     };
+
+    const fetchModules = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const modules = await getModules(modulesPage, search);
+            setModules(modules);
+        } catch (err) {
+            setError(err as string);
+        } finally {
+            setLoading(false);
+        }
+    }, [modulesPage, search]);
+
+    useEffect(() => {
+        if (modulesPage !== 1) {
+            goToFirstPage();
+        } else {
+            fetchModules().then(r => r);
+        }
+    }, [fetchModules, goToFirstPage, lastSearchTerm, modulesPage]);
+
+    // Get all modules
+    useEffect(() => {
+        fetchModules().then(r => r);
+    }, [fetchModules, modulesPage]);
 
     const searchModules = (input : string) => {
         setSearch(input);
