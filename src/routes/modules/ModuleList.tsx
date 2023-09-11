@@ -10,18 +10,18 @@ import {Link} from "react-router-dom";
 import {BsDiscord} from "react-icons/bs";
 import {getModules} from "../../../api/modules.tsx";
 import { useEffect, useState } from "react";
-import { ModuleData } from "../../../api/modules.types";
+import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
 
 export default function ModuleListPage() {
 
     // Modules
-    const [modules, setModules] = useState(null);
+    const [modules, setModules] = useState({ count: 0, results: []} as FilteredModuleList);
 
     // Is loading
     const [loading, setLoading] = useState(true);
 
     // Error
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null as string | null);
 
     // Page
     const [modulesPage, setModulesPage] = useState(1);
