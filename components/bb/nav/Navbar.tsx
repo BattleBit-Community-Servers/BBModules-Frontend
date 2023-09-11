@@ -33,7 +33,7 @@ const navItems = [
 export const Navbar = () => {
     const [loggedIn, setLoggedIn] = useState(false);
     return (
-        <nav className="flex gap-4 my-8">
+        <nav className="flex gap-4 my-8 mx-6">
             <Link className="flex items-center gap-2"
                   to={"/"}>
                 <img src="/img/logo.webp" alt="Logo" width={48} height={48}/>

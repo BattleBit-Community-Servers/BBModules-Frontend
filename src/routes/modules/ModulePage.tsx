@@ -102,8 +102,8 @@ export default function ModulePage() {
 
     return (
         <>
-            <div id="module-container" className="flex gap-4">
-                <div className="mb-4 w-9/12 flex flex-col gap-3">
+            <div id="module-container" className="flex flex-col lg:flex-row gap-4 px-6">
+                <div className="lg:w-9/12 flex flex-col gap-3">
                     <div className="flex flex-col gap-3">
                         {!(module?.versions[0].Version_approved ?? true) ? (
                             <Alert
@@ -234,7 +234,7 @@ export default function ModulePage() {
                         </Card>
                     </div>
                 </div>
-                <Card className="w-3/12 flex flex-col gap-3">
+                <Card className="lg:w-3/12 flex flex-col gap-3">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <div className="flex flex-col">

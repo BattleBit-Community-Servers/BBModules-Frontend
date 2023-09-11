@@ -124,87 +124,89 @@ export default function ModuleListPage() {
 
     return (
         <>
-            <h1 className="text-4xl font-bold mb-3">Modules</h1>
-            {loading && (
-                <div className="flex justify-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            <div className="px-6">
+                <h1 className="text-4xl font-bold mb-3">Modules</h1>
+                {loading && (
+                    <div className="flex justify-center">
+                        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+                    </div>
+                )}
+                {error && <div className="text-red-500">{error}</div>}
+                <Input type="text" placeholder="Search" value={search} onChange={(e) => searchModules(e.target.value)} className="mb-3" />
+                <div className="text-red-500 mb-3">{searchTooShort ? "Please provide at least 4 characters for searching" : null}</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {modules?.results.map((module: ModuleData) => (
+                        <Card key={module.Module_id}>
+                            <CardHeader>
+                                <CardTitle>
+                                    <Link to={`/module/${module.Module_id}`}>
+                                        {module.Module_name}
+                                    </Link>
+                                </CardTitle>
+                                <CardDescription>{module.Module_shortdesc}</CardDescription>
+                            </CardHeader>
+                            <CardFooter className="flex justify-between">
+                                <div className="flex items-center gap-2 mr-2">
+                                    <BsDiscord className="mr-1 h-4 w-4"/>@
+                                    {module.users.User_displayname}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Link to={`/module/${module.Module_id}`}>
+                                        <Button variant="outline">View</Button>
+                                    </Link>
+                                    <Button variant={!module.versions[0].Version_approved ? "destructive" : "default"}>Download v{module.versions[0].Version_v_number}</Button>
+                                </div>
+                            </CardFooter>
+                        </Card>
+                    ))}
                 </div>
-            )}
-            {error && <div className="text-red-500">{error}</div>}
-            <Input type="text" placeholder="Search" value={search} onChange={(e) => searchModules(e.target.value)} className="mb-3" />
-            <div className="text-red-500 mb-3">{searchTooShort ? "Please provide at least 4 characters for searching" : null}</div>
-            <div className="grid grid-cols-3 gap-3">
-                {modules?.results.map((module: ModuleData) => (
-                    <Card key={module.Module_id}>
-                        <CardHeader>
-                            <CardTitle>
-                                <Link to={`/module/${module.Module_id}`}>
-                                    {module.Module_name}
-                                </Link>
-                            </CardTitle>
-                            <CardDescription>{module.Module_shortdesc}</CardDescription>
-                        </CardHeader>
-                        <CardFooter className="flex justify-between">
-                            <div className="flex items-center gap-2 mr-2">
-                                <BsDiscord className="mr-1 h-4 w-4"/>@
-                                {module.users.User_displayname}
-                            </div>
-                            <div className="flex gap-2">
-                                <Link to={`/module/${module.Module_id}`}>
-                                    <Button variant="outline">View</Button>
-                                </Link>
-                                <Button variant={!module.versions[0].Version_approved ? "destructive" : "default"}>Download v{module.versions[0].Version_v_number}</Button>
-                            </div>
-                        </CardFooter>
-                    </Card>
-                ))}
+                { modules?.count > 1 && (<>
+                    <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
+                        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                            Page {modulesPage} of {modules.count}
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={() => goToFirstPage()}
+                            disabled={modulesPage === 1}
+                            >
+                            <span className="sr-only">Go to first page</span>
+                            <ChevronsLeftIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={() => goToPreviousPage()}
+                            disabled={modulesPage === 1}
+                            >
+                            <span className="sr-only">Go to previous page</span>
+                            <ChevronLeftIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                            variant="outline"
+                            className="h-8 w-8 p-0"
+                            onClick={() => goToNextPage()}
+                            disabled={modulesPage === modules.count}
+                            >
+                            <span className="sr-only">Go to next page</span>
+                            <ChevronRightIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={() => goToLastPage()}
+                            disabled={modulesPage === modules.count}
+                            >
+                            <span className="sr-only">Go to last page</span>
+                            <ChevronsRightIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                </>
+                )}
             </div>
-            { modules?.count > 1 && (<>
-                <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
-                    <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-                        Page {modulesPage} of {modules.count}
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Button
-                        variant="outline"
-                        className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={() => goToFirstPage()}
-                        disabled={modulesPage === 1}
-                        >
-                        <span className="sr-only">Go to first page</span>
-                        <ChevronsLeftIcon className="h-4 w-4" />
-                        </Button>
-                        <Button
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        onClick={() => goToPreviousPage()}
-                        disabled={modulesPage === 1}
-                        >
-                        <span className="sr-only">Go to previous page</span>
-                        <ChevronLeftIcon className="h-4 w-4" />
-                        </Button>
-                        <Button
-                        variant="outline"
-                        className="h-8 w-8 p-0"
-                        onClick={() => goToNextPage()}
-                        disabled={modulesPage === modules.count}
-                        >
-                        <span className="sr-only">Go to next page</span>
-                        <ChevronRightIcon className="h-4 w-4" />
-                        </Button>
-                        <Button
-                        variant="outline"
-                        className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={() => goToLastPage()}
-                        disabled={modulesPage === modules.count}
-                        >
-                        <span className="sr-only">Go to last page</span>
-                        <ChevronsRightIcon className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-            </>
-            )}
         </>
     );
 }
