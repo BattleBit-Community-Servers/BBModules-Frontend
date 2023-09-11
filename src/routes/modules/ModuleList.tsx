@@ -15,7 +15,7 @@ import { ModuleData } from "../../../api/modules.types";
 export default function ModuleListPage() {
 
     // Modules
-    const [modules, setModules] = useState([]);
+    const [modules, setModules] = useState(null);
 
     // Is loading
     const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ export default function ModuleListPage() {
         <>
             <h1 className="text-4xl font-bold mb-3">Modules</h1>
             <div className="grid grid-cols-3 gap-3">
-                {modules.map((module: ModuleData) => (
+                {modules?.results.map((module: ModuleData) => (
                     <Card key={module.Module_id}>
                         <CardHeader>
                             <CardTitle>
