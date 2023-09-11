@@ -41,6 +41,30 @@ export default function ModuleListPage() {
         fetchModules();
     }, [modulesPage]);
 
+    const goToPage = (page) => {
+        setModulesPage(page);
+      };
+      
+      const goToFirstPage = () => {
+        goToPage(1);
+      };
+      
+      const goToLastPage = () => {
+        goToPage(modules?.count ?? 1);
+      };
+      
+      const goToNextPage = () => {
+        if (modulesPage < modules?.count ?? 1) {
+          goToPage(modulesPage + 1);
+        }
+      };
+      
+      const goToPreviousPage = () => {
+        if (modulesPage > 1) {
+          goToPage(modulesPage - 1);
+        }
+      };
+
     return (
         <>
             <h1 className="text-4xl font-bold mb-3">Modules</h1>
@@ -70,6 +94,44 @@ export default function ModuleListPage() {
                     </Card>
                 ))}
             </div>
+            <div className="mt-3 flex justify-center">
+      <Button
+        onClick={goToFirstPage}
+        disabled={modulesPage === 1}
+        className="mr-2"
+      >
+        First
+      </Button>
+      <Button
+        onClick={goToPreviousPage}
+        disabled={modulesPage === 1}
+        className="mr-2"
+      >
+        Previous
+      </Button>
+      {Array.from({ length: modules?.count ?? 1 }, (_, index) => (
+        <Button
+          key={index}
+          onClick={() => goToPage(index + 1)}
+          className={`mr-2 ${modulesPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+        >
+          {index + 1}
+        </Button>
+      ))}
+      <Button
+        onClick={goToNextPage}
+        disabled={modulesPage === modules?.count ?? 1}
+        className="mr-2"
+      >
+        Next
+      </Button>
+      <Button
+        onClick={goToLastPage}
+        disabled={modulesPage === modules?.count ?? 1}
+      >
+        Last
+      </Button>
+    </div>
         </>
     );
 }
