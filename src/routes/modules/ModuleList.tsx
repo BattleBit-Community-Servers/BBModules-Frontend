@@ -29,13 +29,25 @@ export default function ModuleListPage() {
     // Get all modules
     useEffect(() => {
         const fetchModules = async () => {
+            // Prevents a flash of loading state/error when loading/error is fast
+            const timeout = setTimeout(() => {
+                setError(null);
+                setLoading(true);
+            }, 500);
+
             try {
-                const modules = await getModules(modulesPage);  // wait for Promise to resolve
+                const modules = await getModules(modulesPage);
                 console.log(modules);
                 setModules(modules);
+                setError(null);
+                clearTimeout(timeout);
             } catch (err) {
-                console.log('Error:', err);
+                console.log(err);
+                setError("Failed to load modules from API.");
+                setModules({ count: 0, results: []} as FilteredModuleList);
             }
+
+            setLoading(false);
         };
     
         fetchModules();
