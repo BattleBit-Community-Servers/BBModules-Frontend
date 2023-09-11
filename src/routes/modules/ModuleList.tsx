@@ -60,21 +60,14 @@ export default function ModuleListPage() {
     };
 
     const fetchModules = useCallback(async () => {
-        const timeout = setTimeout(() => {
-            setLoading(true);
-            setError(null);
-        }, 500);
+        setLoading(true);
+        setError(null);
 
         try {
             const modules = await getModules(modulesPage, search);
-            console.log(modules);
             setModules(modules);
-            setError(null);
-            clearTimeout(timeout);
         } catch (err) {
-            console.error(err);
             setError(err as string);
-            setModules({ count: 0, results: []} as FilteredModuleList);
         } finally {
             setLoading(false);
         }
@@ -95,11 +88,29 @@ export default function ModuleListPage() {
 
     const searchModules = (input : string) => {
         setSearch(input);
+
+        input = input.trim();
+
+        // Deleting search content down to < 3 characters should reset the page once
+        if (input.length < minimumSearchLength && lastSearchTerm.length >= minimumSearchLength) {
+            setSearchTooShort(input.length !== 0);
+            setLastSearchTerm("");
+            return;
+        }
+
+        // Changing search content to >= 3 characters should execute a search
         if (input.length >= minimumSearchLength) {
             setLastSearchTerm(input);
             setSearchTooShort(false);
-        } else {
+            return;
+        }
+
+        if (input.length < minimumSearchLength && input.length > 0) {
             setSearchTooShort(true);
+            return;
+        } else {
+            setSearchTooShort(false);
+            return;
         }
     };
 
@@ -111,7 +122,7 @@ export default function ModuleListPage() {
                     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
                 </div>
             )}
-            {error && <div className="text-red-500">{error.toString()}</div>}
+            {error && <div className="text-red-500">{error}</div>}
             <Input type="text" placeholder="Search" value={search} onChange={(e) => searchModules(e.target.value)} className="mb-3" />
             <div className="text-red-500 mb-3">{searchTooShort ? "Please provide at least 4 characters for searching" : null}</div>
             <div className="grid grid-cols-3 gap-3">
@@ -141,50 +152,50 @@ export default function ModuleListPage() {
                 ))}
             </div>
             { modules?.count > 1 && (<>
-                    <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
-                        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-                            Page {modulesPage} of {modules.count}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                className="hidden h-8 w-8 p-0 lg:flex"
-                                onClick={() => goToFirstPage()}
-                                disabled={modulesPage === 1}
-                            >
-                                <span className="sr-only">Go to first page</span>
-                                <ChevronsLeftIcon className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="h-8 w-8 p-0"
-                                onClick={() => goToPreviousPage()}
-                                disabled={modulesPage === 1}
-                            >
-                                <span className="sr-only">Go to previous page</span>
-                                <ChevronLeftIcon className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="h-8 w-8 p-0"
-                                onClick={() => goToNextPage()}
-                                disabled={modulesPage === modules.count}
-                            >
-                                <span className="sr-only">Go to next page</span>
-                                <ChevronRightIcon className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="hidden h-8 w-8 p-0 lg:flex"
-                                onClick={() => goToLastPage()}
-                                disabled={modulesPage === modules.count}
-                            >
-                                <span className="sr-only">Go to last page</span>
-                                <ChevronsRightIcon className="h-4 w-4" />
-                            </Button>
-                        </div>
+                <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
+                    <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                        Page {modulesPage} of {modules.count}
                     </div>
-                </>
+                    <div className="flex items-center space-x-2">
+                        <Button
+                        variant="outline"
+                        className="hidden h-8 w-8 p-0 lg:flex"
+                        onClick={() => goToFirstPage()}
+                        disabled={modulesPage === 1}
+                        >
+                        <span className="sr-only">Go to first page</span>
+                        <ChevronsLeftIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        onClick={() => goToPreviousPage()}
+                        disabled={modulesPage === 1}
+                        >
+                        <span className="sr-only">Go to previous page</span>
+                        <ChevronLeftIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                        variant="outline"
+                        className="h-8 w-8 p-0"
+                        onClick={() => goToNextPage()}
+                        disabled={modulesPage === modules.count}
+                        >
+                        <span className="sr-only">Go to next page</span>
+                        <ChevronRightIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                        variant="outline"
+                        className="hidden h-8 w-8 p-0 lg:flex"
+                        onClick={() => goToLastPage()}
+                        disabled={modulesPage === modules.count}
+                        >
+                        <span className="sr-only">Go to last page</span>
+                        <ChevronsRightIcon className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+            </>
             )}
         </>
     );

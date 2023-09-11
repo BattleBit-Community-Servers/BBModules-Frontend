@@ -10,7 +10,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "../../ui/dropdown-menu"
+} from "../../ui/dropdown-menu";
 import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
 import {useState} from "react";
 import {mockUserData} from "../../../src/mockdata.ts";
@@ -48,5 +48,5 @@ export function UserDropdownMenu() {
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }

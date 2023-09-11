@@ -1,4 +1,3 @@
-import {mockModuleDetailData, mockUserData} from "../../mockdata.ts";
 import {
     Card,
     CardContent,
@@ -9,7 +8,6 @@ import {
 } from "../../../components/ui/card.tsx";
 import {History} from "lucide-react";
 import {Button} from "../../../components/ui/button.tsx";
-import {Input} from "../../../components/ui/input.tsx";
 import MDEditor from "@uiw/react-md-editor";
 import {
     Alert,
@@ -18,10 +16,8 @@ import {
 } from "../../../components/ui/alert.tsx";
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
-import {AiFillCheckCircle} from "react-icons/ai";
 import {BsDiscord} from "react-icons/bs";
-import {FaTerminal} from "react-icons/fa";
-import {SetStateAction, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {
     Sheet,
@@ -43,16 +39,9 @@ import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
-    const moduleData = mockModuleDetailData;
 
     // Modules
     const [module, setModule] = useState<ModuleData>();
-
-    // Is loading
-    const [loading, setLoading] = useState(true);
-
-    // Error
-    const [error, setError] = useState(null);
 
     // Get all modules
     useEffect(() => {
@@ -67,10 +56,8 @@ export default function ModulePage() {
             }
         };
     
-        fetchModules();
+        fetchModules().then(r => r);
     }, [id]);
-
-    const [openConfirmApproveModal, setOpenConfirmApproveModal] = useState(false);
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
@@ -86,14 +73,13 @@ export default function ModulePage() {
     // TODO: Implement approveModule to actually
     // approve the module in the database
     const approveModule = async () => {
-        setOpenConfirmApproveModal(false);
+        console.log("Approving module...");
     };
 
     // TODO: Implement denyModule to actually
     // deny the module in the database
     const denyModule = async () => {
-        setOpenConfirmApproveModal(false);
-        // setModuleRejected(true);
+        console.log("Denying module...");
     };
 
     // TODO: Implement module edit mode

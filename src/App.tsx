@@ -1,5 +1,4 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Home from "./routes/Home.tsx";
 import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
@@ -38,5 +37,5 @@ export default function App() {
                 </div>
             </BrowserRouter>
         </>
-    )
+    );
 }
