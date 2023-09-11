@@ -6,4 +6,4 @@ export const Footer = () => {
             This project is part of the <Link to="https://battlebit.community/">battlebit.community</Link>. <Link to={"/privacy"}>Privacy Policy</Link>
         </footer>
     );
-}
+};

@@ -182,6 +182,7 @@ export default function ModuleListPage() {
         ))}
       </div>
       {modules?.count > 1 && (
+
         <>
           <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
             <div className="flex w-[100px] items-center justify-center text-sm font-medium">

@@ -68,5 +68,5 @@ export default function Privacy() {
             <h2>9. Contact Information</h2>
             <p>If you have any questions, concerns, or requests regarding this Privacy Notice or the processing of your personal information, please contact us at rainorigami@battlebit.community.</p>
         </div>
-    )
+    );
 }
