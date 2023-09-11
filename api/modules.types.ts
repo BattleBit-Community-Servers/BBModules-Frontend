@@ -7,7 +7,7 @@ type Users = {
 type Versions = {
   Version_v_number: string;
   Version_approved: boolean;
-  dependencies: Dependencies[];
+  Version_dependencies: Dependencies[];
 };
 
 export type Dependencies = {
