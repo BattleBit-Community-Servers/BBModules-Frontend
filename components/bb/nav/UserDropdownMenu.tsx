@@ -29,7 +29,7 @@ export function UserDropdownMenu() {
                     <AvatarFallback>BB</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent align="end" sideOffset={10} className="w-56">
                 <DropdownMenuLabel>Logged in as {user.User_displayname}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
