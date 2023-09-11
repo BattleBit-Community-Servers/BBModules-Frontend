@@ -2,11 +2,11 @@ import { FilteredModuleList, ModuleData } from "./modules.types";
 
 const apiUrl = "https://apirunner.mevng.net";
 
-export async function getModules(page: number, timeoutMs = 5000) : Promise<FilteredModuleList> {
+export async function getModules(page: number, search = "", timeoutMs = 5000) : Promise<FilteredModuleList> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     
-    const response = await fetch(`${apiUrl}/Modules/GetModules?page=${page}`,
+    const response = await fetch(`${apiUrl}/Modules/GetModules?page=${page}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
         { signal: controller.signal });
     
     clearTimeout(timeout);

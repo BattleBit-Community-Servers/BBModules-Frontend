@@ -11,6 +11,7 @@ import {BsDiscord} from "react-icons/bs";
 import {getModules} from "../../../api/modules.tsx";
 import { useEffect, useState } from "react";
 import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
+import { Input } from "../../../components/ui/input.tsx";
 
 export default function ModuleListPage() {
 
@@ -26,6 +27,9 @@ export default function ModuleListPage() {
     // Page
     const [modulesPage, setModulesPage] = useState(1);
 
+    // Search
+    const [search, setSearch] = useState("");
+
     // Get all modules
     useEffect(() => {
         const fetchModules = async () => {
@@ -36,7 +40,7 @@ export default function ModuleListPage() {
             }, 500);
 
             try {
-                const modules = await getModules(modulesPage);
+                const modules = await getModules(modulesPage, search);
                 console.log(modules);
                 setModules(modules);
                 setError(null);
@@ -51,7 +55,7 @@ export default function ModuleListPage() {
         };
     
         fetchModules();
-    }, [modulesPage]);
+    }, [modulesPage, search]);
 
     const goToPage = (page : number) => {
         setModulesPage(page);
@@ -86,6 +90,7 @@ export default function ModuleListPage() {
                 </div>
             )}
             {error && <div className="text-red-500">{error}</div>}
+            <Input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="mb-3" />
             <div className="grid grid-cols-3 gap-3">
                 {modules?.results.map((module: ModuleData) => (
                     <Card key={module.Module_id}>
