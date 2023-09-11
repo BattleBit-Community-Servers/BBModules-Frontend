@@ -52,7 +52,7 @@ export const Navbar = () => {
                 ) : (
                     <div className="flex items-center gap-2 ml-auto">
                         <Button onClick={() => {
-                            setLoggedIn(true)
+                            setLoggedIn(true);
                         }}>
                                 <span className="flex items-center gap-2"><MdLogin/>Login</span>
                         </Button>
@@ -61,4 +61,4 @@ export const Navbar = () => {
             </div>
         </nav>
     );
-}
+};
