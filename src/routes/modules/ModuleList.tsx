@@ -80,6 +80,12 @@ export default function ModuleListPage() {
     return (
         <>
             <h1 className="text-4xl font-bold mb-3">Modules</h1>
+            {loading && (
+                <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+                </div>
+            )}
+            {error && <div className="text-red-500">{error}</div>}
             <div className="grid grid-cols-3 gap-3">
                 {modules?.results.map((module: ModuleData) => (
                     <Card key={module.Module_id}>
