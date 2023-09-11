@@ -216,7 +216,7 @@ export default function ModulePage() {
                                         <div style={{flex: 1}}>Name</div>
                                     </div>
                                     {/* TODO: sort by type, binary first, then required, then optional */}
-                                    {module?.versions[0].Version_dependencies.map((dependency: Dependencies) => (
+                                    {module?.versions[0].Version_dependencies?.map((dependency: Dependencies) => (
                                         <div style={{display: "flex", flexDirection: "row"}}>
                                             <div style={{flex: 1}}>
                                                 {dependency.Dependency_type[0].toLocaleUpperCase()}
