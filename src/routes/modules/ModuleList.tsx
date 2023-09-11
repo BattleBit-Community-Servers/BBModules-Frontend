@@ -53,7 +53,7 @@ export default function ModuleListPage() {
         fetchModules();
     }, [modulesPage]);
 
-    const goToPage = (page) => {
+    const goToPage = (page : number) => {
         setModulesPage(page);
       };
       
@@ -106,44 +106,46 @@ export default function ModuleListPage() {
                     </Card>
                 ))}
             </div>
-            <div className="mt-3 flex justify-center">
-      <Button
-        onClick={goToFirstPage}
-        disabled={modulesPage === 1}
-        className="mr-2"
-      >
-        First
-      </Button>
-      <Button
-        onClick={goToPreviousPage}
-        disabled={modulesPage === 1}
-        className="mr-2"
-      >
-        Previous
-      </Button>
-      {Array.from({ length: modules?.count ?? 1 }, (_, index) => (
-        <Button
-          key={index}
-          onClick={() => goToPage(index + 1)}
-          className={`mr-2 ${modulesPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
-        >
-          {index + 1}
-        </Button>
-      ))}
-      <Button
-        onClick={goToNextPage}
-        disabled={modulesPage === modules?.count ?? 1}
-        className="mr-2"
-      >
-        Next
-      </Button>
-      <Button
-        onClick={goToLastPage}
-        disabled={modulesPage === modules?.count ?? 1}
-      >
-        Last
-      </Button>
-    </div>
+            { modules?.count > 1 && (
+                <div className="mt-3 flex justify-center">
+                    <Button
+                        onClick={goToFirstPage}
+                        disabled={modulesPage === 1}
+                        className="mr-2"
+                    >
+                        First
+                    </Button>
+                    <Button
+                        onClick={goToPreviousPage}
+                        disabled={modulesPage === 1}
+                        className="mr-2"
+                    >
+                        Previous
+                    </Button>
+                    {Array.from({ length: modules?.count ?? 1 }, (_, index) => (
+                        <Button
+                        key={index}
+                        onClick={() => goToPage(index + 1)}
+                        className={`mr-2 ${modulesPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+                        >
+                        {index + 1}
+                        </Button>
+                    ))}
+                    <Button
+                        onClick={goToNextPage}
+                        disabled={modulesPage === modules?.count ?? 1}
+                        className="mr-2"
+                    >
+                        Next
+                    </Button>
+                    <Button
+                        onClick={goToLastPage}
+                        disabled={modulesPage === modules?.count ?? 1}
+                    >
+                        Last
+                    </Button>
+                </div>
+            )}
         </>
     );
 }
