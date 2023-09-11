@@ -15,6 +15,8 @@ import { Input } from "../../../components/ui/input.tsx";
 
 export default function ModuleListPage() {
 
+    const minimumSearchLength = 4;
+
     // Modules
     const [modules, setModules] = useState({ count: 0, results: []} as FilteredModuleList);
 
@@ -29,57 +31,95 @@ export default function ModuleListPage() {
 
     // Search
     const [search, setSearch] = useState("");
+    const [lastSearchTerm, setLastSearchTerm] = useState("");
+    const [searchTooShort, setSearchTooShort] = useState(false);
+
+    useEffect(() => {
+        if (modulesPage !== 1) {
+            goToFirstPage();
+        } else {
+            fetchModules();
+        }
+    }, [lastSearchTerm]);
+
+    const fetchModules = async () => {
+        // Prevents a flash of loading state/error when loading/error is fast
+        const timeout = setTimeout(() => {
+            setError(null);
+            setLoading(true);
+        }, 500);
+
+        try {
+            const modules = await getModules(modulesPage, lastSearchTerm);
+            console.log(modules);
+            setModules(modules);
+            setError(null);
+            clearTimeout(timeout);
+        } catch (err) {
+            console.log(err);
+            setError("Failed to load modules from API.");
+            setModules({ count: 0, results: []} as FilteredModuleList);
+        }
+
+        setLoading(false);
+    };
 
     // Get all modules
     useEffect(() => {
-        const fetchModules = async () => {
-            // Prevents a flash of loading state/error when loading/error is fast
-            const timeout = setTimeout(() => {
-                setError(null);
-                setLoading(true);
-            }, 500);
-
-            try {
-                const modules = await getModules(modulesPage, search);
-                console.log(modules);
-                setModules(modules);
-                setError(null);
-                clearTimeout(timeout);
-            } catch (err) {
-                console.log(err);
-                setError("Failed to load modules from API.");
-                setModules({ count: 0, results: []} as FilteredModuleList);
-            }
-
-            setLoading(false);
-        };
-    
         fetchModules();
-    }, [modulesPage, search]);
+    }, [modulesPage]);
 
     const goToPage = (page : number) => {
         setModulesPage(page);
-      };
-      
-      const goToFirstPage = () => {
+    };
+
+    const goToFirstPage = () => {
         goToPage(1);
-      };
-      
-      const goToLastPage = () => {
+    };
+
+    const goToLastPage = () => {
         goToPage(modules?.count ?? 1);
-      };
-      
-      const goToNextPage = () => {
+    };
+
+    const goToNextPage = () => {
         if (modulesPage < modules?.count ?? 1) {
-          goToPage(modulesPage + 1);
+         goToPage(modulesPage + 1);
         }
-      };
-      
-      const goToPreviousPage = () => {
+    };
+
+    const goToPreviousPage = () => {
         if (modulesPage > 1) {
-          goToPage(modulesPage - 1);
+            goToPage(modulesPage - 1);
         }
-      };
+    };
+
+    const searchModules = (input : string) => {
+        setSearch(input);
+
+        input = input.trim();
+
+        // Deleting search content down to < 3 characters should reset the page once
+        if (input.length < minimumSearchLength && lastSearchTerm.length >= minimumSearchLength) {
+            setSearchTooShort(input.length !== 0);
+            setLastSearchTerm("");
+            return;
+        }
+
+        // Changing search content to >= 3 characters should execute a search
+        if (input.length >= minimumSearchLength) {
+            setLastSearchTerm(input);
+            setSearchTooShort(false);
+            return;
+        }
+
+        if (input.length < minimumSearchLength && input.length > 0) {
+            setSearchTooShort(true);
+            return;
+        } else {
+            setSearchTooShort(false);
+            return;
+        }
+    };
 
     return (
         <>
@@ -90,7 +130,8 @@ export default function ModuleListPage() {
                 </div>
             )}
             {error && <div className="text-red-500">{error}</div>}
-            <Input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} className="mb-3" />
+            <Input type="text" placeholder="Search" value={search} onChange={(e) => searchModules(e.target.value)} className="mb-3" />
+            <div className="text-red-500 mb-3">{searchTooShort ? "Please provide at least 4 characters for searching" : null}</div>
             <div className="grid grid-cols-3 gap-3">
                 {modules?.results.map((module: ModuleData) => (
                     <Card key={module.Module_id}>
