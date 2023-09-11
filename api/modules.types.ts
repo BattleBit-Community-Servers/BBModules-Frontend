@@ -7,6 +7,7 @@ type Users = {
 type Versions = {
   Version_v_number: string;
   Version_approved: boolean;
+  dependencies: Dependencies[];
 };
 
 export type Dependencies = {
@@ -24,7 +25,6 @@ export type ModuleData = {
   Module_shortdesc: string;
   Module_markdown: string;
   Module_downloads: number;
-  dependencies: Dependencies[];
   users: Users;
   versions: Versions[];
 };
