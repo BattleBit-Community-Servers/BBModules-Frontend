@@ -28,3 +28,8 @@ export type ModuleData = {
   users: Users;
   versions: Versions[];
 };
+
+export type FilteredModuleList = {
+  results: ModuleData[];
+  count: number;
+};
