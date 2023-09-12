@@ -202,7 +202,7 @@ export default function ModulePage() {
                                         <div style={{flex: 1}}>Name</div>
                                     </div>
                                     {/* TODO: sort by type, binary first, then required, then optional */}
-                                    {module?.versions[0].Version_dependencies?.map((dependency: Dependencies) => (
+                                    {module?.versions[0].dependencies?.map((dependency: Dependencies) => (
                                         <div style={{display: "flex", flexDirection: "row"}}>
                                             <div style={{flex: 1}}>
                                                 {dependency.Dependency_type[0].toLocaleUpperCase()}
@@ -213,14 +213,14 @@ export default function ModulePage() {
                                                     rehype()
                                                         .use(rehypeSanitize)
                                                         .processSync(
-                                                            dependency.Dependency_text?.toString()
+                                                            dependency.Dependency_binary_text?.toString()
                                                         )
                                                         .toString()
                                                 ) : (
                                                     <>
-                                                        {dependency.Dependency_name}
+                                                        {dependency.module.Module_name}
                                                         <Link
-                                                            to={`/module/${dependency.Dependency_name}`}
+                                                            to={`/module/${dependency.module.Module_id}`}
                                                         >
                                                             <Button variant="outline">View</Button>
                                                         </Link>

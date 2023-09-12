@@ -7,16 +7,13 @@ type Users = {
 type Versions = {
   Version_v_number: string;
   Version_approved: boolean;
-  Version_dependencies: Dependencies[];
+  dependencies: Dependencies[];
 };
 
 export type Dependencies = {
-  Dependency_id: number;
-  Dependency_version_id: number;
-  Dependency_name: string;
-  Dependency_module_version_id: number;
   Dependency_type: string;
-  Dependency_text: string | null; 
+  Dependency_binary_text: string | null;
+  module: ModuleData;
 };
 
 export type ModuleData = {
