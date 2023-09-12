@@ -152,7 +152,11 @@ export default function ModuleListPage() {
                     placeholder="Search"
                     value={search}
                     onChange={(e) => searchModules(e.target.value)}
-                    className="mb-3"
+                    className={`mb-3 ${
+                        search.length < 4 && search.length !== 0
+                            ? "border border-red-500"
+                            : ""
+                    }`}
                 />
                 <div className="text-red-500 mb-3">
                     {searchTooShort
