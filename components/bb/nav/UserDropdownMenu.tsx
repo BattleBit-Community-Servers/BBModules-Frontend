@@ -14,6 +14,7 @@ import {
 import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
 import {useState} from "react";
 import {mockUserData} from "../../../src/mockdata.ts";
+import { Link } from "react-router-dom";
 
 export function UserDropdownMenu() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -33,10 +34,12 @@ export function UserDropdownMenu() {
                 <DropdownMenuLabel>Logged in as {user.User_displayname}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="cursor-pointer">
+                    <Link to="/upload">
+                        <DropdownMenuItem className="cursor-pointer">
                         <Upload className="mr-2 h-4 w-4" />
                         <span>Upload module</span>
-                    </DropdownMenuItem>
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" onClick={() => {
