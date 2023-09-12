@@ -41,8 +41,13 @@ export default function ModuleListPage() {
     const [search, setSearch] = useState("");
     const [lastSearchTerm, setLastSearchTerm] = useState("");
     const [searchTooShort, setSearchTooShort] = useState(false);
+    const [initialLoad, setInitialLoad] = useState(true);
 
     useEffect(() => {
+        if (initialLoad) {
+            setInitialLoad(false);
+            return;
+        }
         if (modulesPage !== 1) {
             goToFirstPage();
         } else {
