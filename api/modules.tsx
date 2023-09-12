@@ -1,6 +1,6 @@
 import { FilteredModuleList, ModuleData } from "./modules.types";
 
-const apiUrl = "https://apirunner.mevng.net";
+export const apiUrl = "https://apirunner.mevng.net";
 
 export async function getModules(page: number, search = "", timeoutMs = 5000) : Promise<FilteredModuleList> {
     const controller = new AbortController();

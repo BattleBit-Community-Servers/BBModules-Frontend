@@ -34,7 +34,7 @@ import {
 import rehypeSanitize from "rehype-sanitize";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import {rehype} from "rehype";
-import { getModule } from "../../../api/modules.tsx";
+import { apiUrl, getModule } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
 
 export default function ModulePage() {
@@ -253,7 +253,7 @@ export default function ModulePage() {
                                 <History className="mr-2 h-4 w-4"/>
                                 Latest version: {module?.versions[0].Version_v_number}
                             </p>
-                            <Link to={`//backend/Download/${module?.Module_name}/latest`}>
+                            <Link to={`${apiUrl}/Download/${module?.Module_name}/latest`}>
                                 <Button className="w-full">
                                     <ImDownload className="mr-2 h-4 w-4"/> Download
                                 </Button>
@@ -336,7 +336,7 @@ export default function ModulePage() {
                                         </p>
                                         {/* TODO: link to backend */}
                                         <Link
-                                            to={`//backend/Download/${module?.Module_name}/${version.Version_v_number}`}
+                                            to={`${apiUrl}/Download/${module?.Module_name}/${version.Version_v_number}`}
                                         >
                                             <Button variant={"outline"} size={"sm"}>
                                                 Download
