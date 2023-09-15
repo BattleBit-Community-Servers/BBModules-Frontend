@@ -108,9 +108,11 @@ export default function UploadPage() {
                                 </p>
                                 <button
                                     onClick={() =>
-                                        (document
-                                            .querySelector('input[type="file"]') as HTMLInputElement)
-                                            ?.click()
+                                        (
+                                            document.querySelector(
+                                                'input[type="file"]'
+                                            ) as HTMLInputElement
+                                        )?.click()
                                     }
                                 >
                                     Select a .cs file

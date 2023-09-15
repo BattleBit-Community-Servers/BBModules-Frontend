@@ -1,7 +1,4 @@
-import {
-    LogOut,
-    Upload,
-} from "lucide-react";
+import { LogOut, Upload } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,7 +8,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Link } from "react-router-dom";
 import { apiUrl } from "../../../api/modules.tsx";
 import { useContext } from "react";
@@ -24,18 +21,22 @@ export function UserDropdownMenu() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
-                    <AvatarImage src={undefined} alt="User Profile Picture"/>
-                    <AvatarFallback>{user?.User_displayname.substring(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarImage src={undefined} alt="User Profile Picture" />
+                    <AvatarFallback>
+                        {user?.User_displayname.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={10} className="w-56">
-                <DropdownMenuLabel>Logged in as {user!.User_displayname}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                    Logged in as {user!.User_displayname}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <Link to="/upload">
                         <DropdownMenuItem className="cursor-pointer">
-                        <Upload className="mr-2 h-4 w-4" />
-                        <span>Upload module</span>
+                            <Upload className="mr-2 h-4 w-4" />
+                            <span>Upload module</span>
                         </DropdownMenuItem>
                     </Link>
                 </DropdownMenuGroup>
