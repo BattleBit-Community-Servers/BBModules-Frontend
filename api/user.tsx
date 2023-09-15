@@ -1,14 +1,4 @@
-const apiUrl = "https://apirunner.mevng.net";
+import { createContext } from "react";
+import { UserData } from "./user.types.js";
 
-export async function currentUser() {
-  try {
-    const response = await fetch(apiUrl + '/profile', {
-      method: 'GET',
-      credentials: 'include', // important part
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
-}
+export const UserContext = createContext(null as UserData | null);
