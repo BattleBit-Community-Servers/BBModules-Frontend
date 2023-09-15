@@ -40,12 +40,12 @@ export function UserDropdownMenu() {
                     </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <Link to={`${apiUrl}/auth/logout`}>
+                <a href={`${apiUrl}/auth/logout`}>
                     <DropdownMenuItem className="cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Log out</span>
                     </DropdownMenuItem>
-                </Link>
+                </a>
             </DropdownMenuContent>
         </DropdownMenu>
     );

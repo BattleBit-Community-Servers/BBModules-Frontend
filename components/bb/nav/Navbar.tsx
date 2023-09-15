@@ -54,11 +54,11 @@ export const Navbar = () => {
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 ml-auto">
-                        <Link to={`${apiUrl}/auth/discord`}>
+                        <a href={`${apiUrl}/auth/discord`}>
                             <Button>
                                 <span className="flex items-center gap-2"><MdLogin/>Login</span>
                             </Button>
-                        </Link>
+                        </a>
                     </div>
                 )}
             </div>
