@@ -25,7 +25,7 @@ export function UserDropdownMenu() {
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
                     <AvatarImage src={undefined} alt="User Profile Picture"/>
-                    <AvatarFallback>BB</AvatarFallback>
+                    <AvatarFallback>{user?.User_displayname.substring(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={10} className="w-56">
