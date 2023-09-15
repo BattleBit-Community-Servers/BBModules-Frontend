@@ -12,26 +12,24 @@ import {
     DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
 import {Avatar, AvatarFallback, AvatarImage} from "../../ui/avatar";
-import {useState} from "react";
-import {mockUserData} from "../../../src/mockdata.ts";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../../../api/modules.tsx";
+import { useContext } from "react";
+import { UserContext } from "../../../api/user.tsx";
 
 export function UserDropdownMenu() {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const user = mockUserData[Math.floor(Math.random() * mockUserData.length)];
-
-    console.log(loggedIn);
+    const user = useContext(UserContext);
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
-                    <AvatarImage src={user.User_profile_picture} alt="User Profile Picture"/>
+                    <AvatarImage src={undefined} alt="User Profile Picture"/>
                     <AvatarFallback>BB</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={10} className="w-56">
-                <DropdownMenuLabel>Logged in as {user.User_displayname}</DropdownMenuLabel>
+                <DropdownMenuLabel>Logged in as {user!.User_displayname}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <Link to="/upload">
@@ -42,13 +40,12 @@ export function UserDropdownMenu() {
                     </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer" onClick={() => {
-                    setLoggedIn(!loggedIn);
-                    window.location.reload();
-                }}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                </DropdownMenuItem>
+                <Link to={`${apiUrl}/auth/logout`}>
+                    <DropdownMenuItem className="cursor-pointer">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                    </DropdownMenuItem>
+                </Link>
             </DropdownMenuContent>
         </DropdownMenu>
     );
