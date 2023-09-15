@@ -39,6 +39,9 @@ export async function getModule(id: number): Promise<ModuleData> {
 export async function approveVersion(id: number): Promise<boolean> {
     const response = await fetch(`${apiUrl}/admin/Review`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({ id: id, state: true }),
         credentials: "include",
     });
@@ -48,6 +51,9 @@ export async function approveVersion(id: number): Promise<boolean> {
 export async function denyVersion(id: number): Promise<boolean> {
     const response = await fetch(`${apiUrl}/admin/Review`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({ id: id, state: false }),
         credentials: "include",
     });

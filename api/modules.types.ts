@@ -5,6 +5,7 @@ type Users = {
 };
 
 type Versions = {
+    Version_id: number;
     Version_v_number: string;
     Version_approved: boolean;
     dependencies: Dependencies[];

@@ -332,7 +332,7 @@ export default function ModulePage() {
                                                                 onClick={() =>
                                                                     toast.promise(
                                                                         approveVersion(
-                                                                            module.Module_id
+                                                                            module.versions[0].Version_id
                                                                         ),
                                                                         {
                                                                             pending:
@@ -371,7 +371,7 @@ export default function ModulePage() {
                                                                     () =>
                                                                         toast.promise(
                                                                             denyVersion(
-                                                                                module.Module_id
+                                                                                module.versions[0].Version_id
                                                                             ),
                                                                             {
                                                                                 pending:
