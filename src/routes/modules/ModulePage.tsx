@@ -64,28 +64,13 @@ export default function ModulePage() {
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
-
-    // Module rejected state
-    // const [moduleRejected, setModuleRejected] = useState(moduleData.Module_rejected);
     
     // Module markdown state
     const [module_markdown, setModuleMarkdown] = useState(
         module?.Module_markdown
     );
 
-    // TODO: Implement approveModule to actually
-    // approve the module in the database
-    const approveModule = async () => {
-        console.log("Approving module...");
-    };
-
-    // TODO: Implement denyModule to actually
-    // deny the module in the database
-    const denyModule = async () => {
-        console.log("Denying module...");
-    };
-
-    // TODO: Implement module edit mode
+    // Markdown editing
     const editModule = async (isEditing: boolean) => {
         setIsEditingModule(isEditing);
     };
@@ -160,11 +145,6 @@ export default function ModulePage() {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                {/* <div>Author ID: {moduleData.Module_author_id}</div>
-                                <div>Downloads: {moduleData.Module_downloads}</div>
-                                <div>Created At: {moduleData.Module_created_at}</div>
-                                <div>Updated At: {moduleData.Module_updated_at}</div>
-                                <div>Markdown: {moduleData.Module_markdown}</div> */}
                                 <div>
                                     <h2 className="text-2xl mb-4">Description</h2>
                                     {isEditingModule ? (
@@ -251,7 +231,6 @@ export default function ModulePage() {
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-col gap-3">
-                            {/* TODO: link to backend */}
                             <p className={`my-2 flex items-center ${!(module?.versions[0].Version_approved ?? true) ? "text-yellow-500" : ""}`}>
                                 <History className="mr-2 h-4 w-4"/>
                                 Latest version: {module?.versions[0].Version_v_number}
@@ -337,7 +316,6 @@ export default function ModulePage() {
                                             <History className="mr-2 h-4 w-4"/>
                                             {version.Version_v_number}
                                         </p>
-                                        {/* TODO: link to backend */}
                                         <Link
                                             to={`${apiUrl}/Download/${module?.Module_name}/${version.Version_v_number}`}
                                         >
