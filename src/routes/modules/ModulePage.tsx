@@ -36,8 +36,8 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import { rehype } from "rehype";
 import {
     apiUrl,
-    approveModule,
-    denyModule,
+    approveVersion,
+    denyVersion,
     getModule,
 } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
@@ -331,7 +331,7 @@ export default function ModulePage() {
                                                                 type="submit"
                                                                 onClick={() =>
                                                                     toast.promise(
-                                                                        approveModule(
+                                                                        approveVersion(
                                                                             module.Module_id
                                                                         ),
                                                                         {
@@ -370,7 +370,7 @@ export default function ModulePage() {
                                                                 onClick={
                                                                     () =>
                                                                         toast.promise(
-                                                                            denyModule(
+                                                                            denyVersion(
                                                                                 module.Module_id
                                                                             ),
                                                                             {

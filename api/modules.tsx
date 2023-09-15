@@ -36,17 +36,19 @@ export async function getModule(id: number): Promise<ModuleData> {
     return data;
 }
 
-export async function approveModule(id: number): Promise<boolean> {
-    const response = await fetch(`${apiUrl}/Modules/ApproveModule/${id}`, {
+export async function approveVersion(id: number): Promise<boolean> {
+    const response = await fetch(`${apiUrl}/Review`, {
         method: "POST",
+        body: JSON.stringify({ id: id, state: true }),
         credentials: "include",
     });
     return response.ok;
 }
 
-export async function denyModule(id: number): Promise<boolean> {
+export async function denyVersion(id: number): Promise<boolean> {
     const response = await fetch(`${apiUrl}/Modules/DenyModule/${id}`, {
         method: "POST",
+        body: JSON.stringify({ id: id, state: false }),
         credentials: "include",
     });
     return response.ok;
