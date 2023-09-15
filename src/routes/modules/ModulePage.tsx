@@ -203,7 +203,7 @@ export default function ModulePage() {
                                     </div>
                                     {/* TODO: sort by type, binary first, then required, then optional */}
                                     {module?.versions[0].dependencies?.map((dependency: Dependencies) => (
-                                        <div style={{display: "flex", flexDirection: "row"}}>
+                                        <div key={dependency.Dependency_binary_text ?? dependency.module.Module_id} style={{display: "flex", flexDirection: "row"}}>
                                             <div style={{flex: 1}}>
                                                 {dependency.Dependency_type[0].toLocaleUpperCase()}
                                                 {dependency.Dependency_type.slice(1)}
@@ -329,7 +329,7 @@ export default function ModulePage() {
                             <p className="mt-4">Older versions</p>
                             <div className="flex flex-col divide-y-2">
                                 {(module?.versions.length ?? 0) > 1 ? module?.versions.slice(1).map((version) => (
-                                    <div className="py-2 bg-color-white flex justify-between">
+                                    <div key={version.Version_v_number} className="py-2 bg-color-white flex justify-between">
                                         <p className="flex items-center">
                                             <History className="mr-2 h-4 w-4"/>
                                             {version.Version_v_number}
