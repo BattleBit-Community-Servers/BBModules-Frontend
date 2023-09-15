@@ -108,8 +108,8 @@ export default function UploadPage() {
                                 </p>
                                 <button
                                     onClick={() =>
-                                        document
-                                            .querySelector('input[type="file"]')
+                                        (document
+                                            .querySelector('input[type="file"]') as HTMLInputElement)
                                             ?.click()
                                     }
                                 >
