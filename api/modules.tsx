@@ -25,3 +25,19 @@ export async function getModule(id: number) : Promise<ModuleData> {
     const data = await response.json();
     return data;
 }
+
+export async function approveModule(id: number) : Promise<boolean> {
+    const response = await fetch(`${apiUrl}/Modules/ApproveModule/${id}`, {
+        method: "POST",
+        credentials: "include"
+      });
+    return response.ok;
+}
+
+export async function denyModule(id: number) : Promise<boolean> {
+    const response = await fetch(`${apiUrl}/Modules/DenyModule/${id}`, {
+        method: "POST",
+        credentials: "include"
+      });
+    return response.ok;
+}

@@ -34,7 +34,7 @@ import {
 import rehypeSanitize from "rehype-sanitize";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import {rehype} from "rehype";
-import { apiUrl, getModule } from "../../../api/modules.tsx";
+import { apiUrl, approveModule, denyModule, getModule } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
 import { UserContext } from "../../../api/user.tsx";
 
@@ -264,7 +264,7 @@ export default function ModulePage() {
                                                             <Button
                                                                 type="submit"
                                                                 onClick={() =>
-                                                                    toast.promise(approveModule(), {
+                                                                    toast.promise(approveModule(module.Module_id), {
                                                                         pending: "Approving module...",
                                                                         success: "Module approved!",
                                                                         error: "Failed to approve module!",
@@ -290,7 +290,7 @@ export default function ModulePage() {
                                                             <Button
                                                                 type="submit"
                                                                 onClick={() =>
-                                                                    toast.promise(denyModule(), {
+                                                                    toast.promise(denyModule(module.Module_id), {
                                                                         pending: "Denying module...",
                                                                         success: "Module denied!",
                                                                         error: "Failed to deny module!",
