@@ -1,11 +1,13 @@
 import {Link} from "react-router-dom";
 import {IoExtensionPuzzle} from "react-icons/io5";
-import {useState} from "react";
+import { UserContext } from "../../../api/user.tsx";
 import {MdLogin} from "react-icons/md";
 import {UserDropdownMenu} from "./UserDropdownMenu.tsx";
 import {Button} from "../../ui/button.tsx";
 import {Github} from "lucide-react";
 import {BsDiscord} from "react-icons/bs";
+import { apiUrl } from "../../../api/modules.tsx";
+import { useContext } from "react";
 
 const navItems = [
     {
@@ -31,7 +33,8 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const user = useContext(UserContext);
+
     return (
         <nav className="flex gap-4 my-8 mx-6">
             <Link className="flex items-center gap-2"
@@ -45,17 +48,17 @@ export const Navbar = () => {
                         <span>{item.name}</span>
                     </Link>
                 ))}
-                {loggedIn ? (
+                {user ? (
                     <div className="flex items-center gap-2 ml-auto">
                         <UserDropdownMenu/>
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 ml-auto">
-                        <Button onClick={() => {
-                            setLoggedIn(true);
-                        }}>
+                        <Link to={`${apiUrl}/auth/discord`}>
+                            <Button>
                                 <span className="flex items-center gap-2"><MdLogin/>Login</span>
-                        </Button>
+                            </Button>
+                        </Link>
                     </div>
                 )}
             </div>
