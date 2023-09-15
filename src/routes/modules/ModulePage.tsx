@@ -17,7 +17,7 @@ import {
 import {Link, useParams} from "react-router-dom";
 import {ImDownload} from "react-icons/im";
 import {BsDiscord} from "react-icons/bs";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {
     Sheet,
@@ -36,9 +36,12 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import {rehype} from "rehype";
 import { apiUrl, getModule } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
+import { UserContext } from "../../../api/user.tsx";
 
 export default function ModulePage() {
     const {id = ""} = useParams();
+
+    const user = useContext(UserContext);
 
     // Modules
     const [module, setModule] = useState<ModuleData>();
@@ -98,7 +101,7 @@ export default function ModulePage() {
         );
     };
 
-    const approvable = true; // TODO: approvable = user is moderator
+    const approvable = module?.versions[0].Version_approved === false && (user?.User_roles === "ADMIN" || user?.User_roles === "MODERATOR");
 
     return (
         <>
