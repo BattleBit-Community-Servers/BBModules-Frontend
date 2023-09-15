@@ -108,7 +108,7 @@ export default function ModulePage() {
             <div id="module-container" className="flex flex-col lg:flex-row gap-4 px-6">
                 <div className="lg:w-9/12 flex flex-col gap-3">
                     <div className="flex flex-col gap-3">
-                        {!(module?.versions[0].Version_approved ?? true) ? (
+                        {!(module?.versions[0].Version_approved ?? true) && !approvable ? (
                             <Alert
                                 variant={"default"}
                                 className={"text-yellow-500 border-yellow-500"}
