@@ -7,7 +7,7 @@ export async function getModules(page: number, search = "", timeoutMs = 5000) : 
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     
     const response = await fetch(`${apiUrl}/Modules/GetModules?page=${page}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
-        { signal: controller.signal });
+        { signal: controller.signal, credentials: "include" });
     
     clearTimeout(timeout);
     if (!response.ok) {
@@ -19,7 +19,9 @@ export async function getModules(page: number, search = "", timeoutMs = 5000) : 
 }
 
 export async function getModule(id: number) : Promise<ModuleData> {
-    const response = await fetch(`${apiUrl}/Modules/GetModule/${id}`);
+    const response = await fetch(`${apiUrl}/Modules/GetModule/${id}`, {
+        credentials: "include"
+      });
     const data = await response.json();
     return data;
 }
