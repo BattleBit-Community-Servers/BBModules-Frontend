@@ -59,8 +59,12 @@ export default function ModulePage() {
     useEffect(() => {
         const fetchModules = async () => {
             try {
-                const module = await getModule(parseInt(id)); // wait for Promise to resolve
-                console.log(module);
+                const module = await getModule(parseInt(id));
+
+                if (module.versions.length === 0) {
+                    window.location.href = "/404";
+                }
+
                 setModule(module);
                 setModuleMarkdown(module.Module_markdown);
             } catch (err) {
@@ -167,7 +171,6 @@ export default function ModulePage() {
                                         <MDEditor
                                             value={module_markdown}
                                             onChange={(value) => {
-                                                console.log(value);
                                                 setModuleMarkdown(value || "");
                                             }}
                                             previewOptions={{
@@ -358,7 +361,9 @@ export default function ModulePage() {
                                                                 onClick={() =>
                                                                     toast.promise(
                                                                         approveVersion(
-                                                                            module.versions[0].Version_id
+                                                                            module
+                                                                                .versions[0]
+                                                                                .Version_id
                                                                         ),
                                                                         {
                                                                             pending:
@@ -397,7 +402,9 @@ export default function ModulePage() {
                                                                     () =>
                                                                         toast.promise(
                                                                             denyVersion(
-                                                                                module.versions[0].Version_id
+                                                                                module
+                                                                                    .versions[0]
+                                                                                    .Version_id
                                                                             ),
                                                                             {
                                                                                 pending:
