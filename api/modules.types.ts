@@ -4,10 +4,11 @@ type Users = {
     User_discord_id: string;
 };
 
-type Versions = {
+export type Versions = {
     Version_id: number;
     Version_v_number: string;
     Version_approved: boolean;
+    Version_changelog: string;
     dependencies: Dependencies[];
 };
 
