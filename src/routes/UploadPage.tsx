@@ -1,127 +1,159 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { apiUrl } from "../../api/modules";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 
 export default function UploadPage() {
-    const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const [result, setResult] = useState(null);
-    const [error, setError] = useState(null as string | null);
+    const [loading, setLoading] = useState(false);
+    const [binaryDependencies, setBinaryDependencies] = useState([
+        { name: "" },
+    ]);
+    const [file, setFile] = useState(null as any);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [moduleId, setModuleId] = useState(null as number | null);
+    const [changelog, setChangelog] = useState("");
 
-    // Function to handle file selection
-    const handleFileSelect = (event: any) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile && selectedFile.name.endsWith(".cs")) {
-            setFile(selectedFile);
-        } else {
-            setError("Please select a valid .cs file.");
-        }
+    const addDependency = () => {
+        setBinaryDependencies([...binaryDependencies, { name: "" }]);
     };
 
-    // Function to handle file drop
-    const handleFileDrop = (event: any) => {
-        event.preventDefault();
-        const droppedFile = event.dataTransfer.files[0];
-        if (droppedFile && droppedFile.name.endsWith(".cs")) {
-            setFile(droppedFile);
-        } else {
-            setError("Please drop a valid .cs file.");
-        }
+    const removeDependency = (index: number) => {
+        const newDependencies = [...binaryDependencies];
+        newDependencies.splice(index, 1);
+        setBinaryDependencies(newDependencies);
     };
 
-    // Function to handle file upload to API
-    const uploadFile = async () => {
-        if (file) {
-            setUploading(true);
-            setError(null);
-            setResult(null);
+    const handleDependencyChange = (index: number, event: any) => {
+        const newDependencies = [...binaryDependencies];
+        newDependencies[index].name = event.target.value;
+        setBinaryDependencies(newDependencies);
+    };
 
+    const handleFileChange = (event: any) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        setErrorMessage("");
+
+        try {
             const formData = new FormData();
             formData.append("file", file);
+            formData.append(
+                "binary_dependencies",
+                JSON.stringify(binaryDependencies)
+            );
+            formData.append("changelog", changelog);
 
-            try {
-                const response = await fetch(`${apiUrl}/Upload`, {
-                    method: "POST",
-                    body: formData,
-                    credentials: "include",
-                });
+            const response = await fetch(`${apiUrl}/Modules/AddModule`, {
+                method: "POST",
+                body: formData,
+                credentials: "include",
+            });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setResult(data);
-                } else {
-                    setError("Upload failed. Please try again.");
-                }
-            } catch (err) {
-                setError(
-                    "An error occurred while uploading. Please try again later."
-                );
-            } finally {
-                setUploading(false);
+            if (response.ok) {
+                const data = await response.json();
+                setModuleId(data.Module_id);
+            } else {
+                const errorData = await response.json();
+                setErrorMessage(errorData.message.replace(/\n/g, "<br>"));
             }
-        } else {
-            setError("Please select a valid .cs file.");
+        } catch (error) {
+            setErrorMessage("An error occurred while uploading the module.");
+        } finally {
+            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (file) {
-            uploadFile();
-        }
-    }, [file]);
+    if (moduleId) {
+        window.location.href = `/module/${moduleId}`;
+    }
 
     return (
-        <div>
-            <h1>Upload a new module</h1>
-            {result ? (
-                <p style={{ color: "green" }}>{result}</p>
-            ) : (
-                <>
-                    <input
-                        type="file"
-                        accept=".cs"
-                        onChange={handleFileSelect}
-                        onDrop={handleFileDrop}
-                        style={{ display: "none" }}
+        <>
+            <h1 className="text-4xl font-bold mb-3">Upload a module</h1>
+            <p className="text-lg font-normal text-gray-400">
+                Upload a new module to the repository or upload a new version of
+                one of your existing modules to update it.
+            </p>
+            <h2 className="text-2xl font-bold mb-3">Binary dependencies</h2>
+            <p className="text-lg font-normal text-gray-400">
+                If your module depends on any binaries, you can specify them
+                here. Use one field per dependency.
+            </p>
+            {binaryDependencies.map((dependency, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                    <Input
+                        type="text"
+                        value={dependency.name}
+                        onChange={(e) => handleDependencyChange(index, e)}
+                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
                     />
-                    <div
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleFileDrop}
-                        style={{
-                            border: "2px dashed #ccc",
-                            padding: "20px",
-                            textAlign: "center",
-                        }}
+                    <Button
+                        onClick={() => removeDependency(index)}
+                        className="bg-red-500 text-white rounded-md p-2 hover:bg-red-600 focus:outline-none"
                     >
-                        {uploading ? (
-                            <div>
-                                Uploading and verifying...
-                                <div className="spinner"></div>
-                            </div>
-                        ) : (
-                            <>
-                                {error ? (
-                                    <p style={{ color: "red" }}>{error}</p>
-                                ) : null}
-                                <p>
-                                    Drag and drop a .cs file here, or click to
-                                    select one.
-                                </p>
-                                <button
-                                    onClick={() =>
-                                        (
-                                            document.querySelector(
-                                                'input[type="file"]'
-                                            ) as HTMLInputElement
-                                        )?.click()
-                                    }
-                                >
-                                    Select a .cs file
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </>
+                        -
+                    </Button>
+                </div>
+            ))}
+            <Button
+                onClick={addDependency}
+                className="bg-green-500 text-white rounded-md p-2 hover:bg-green-600 focus:outline-none"
+            >
+                +
+            </Button>
+            <h2 className="text-2xl font-bold mb-3">Changelog</h2>
+            <p className="text-lg font-normal text-gray-400">
+                Provide a changelog for this version of the module. If you leave
+                this blank, the changelog will be set to "Initial upload" for
+                new modules, or "No changelog provided" for existing modules.
+            </p>
+            <MDEditor
+                value={changelog}
+                onChange={(value) => {
+                    setChangelog(value || "");
+                }}
+                previewOptions={{
+                    rehypePlugins: [[rehypeSanitize]],
+                }}
+            />
+            <h2 className="text-2xl font-bold mb-3">Module file</h2>
+            <p className="text-lg font-normal text-gray-400">
+                Place your module .cs file here to upload it to the repository.
+                It will be validated to check for compile-time errors, if there
+                are no binary dependencies. Afterwards it will await approval by
+                a moderator.
+            </p>
+            <input
+                type="file"
+                onChange={handleFileChange}
+                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-500"
+            />
+            <Button
+                onClick={handleSubmit}
+                className="bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 focus:outline-none"
+            >
+                Upload
+            </Button>
+            {loading ? (
+                <div
+                    className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                    role="status"
+                    aria-label="loading"
+                >
+                    <span className="sr-only">Uploading and validating...</span>
+                </div>
+            ) : null}
+            {errorMessage && (
+                <div
+                    className="text-red-500"
+                    dangerouslySetInnerHTML={{ __html: errorMessage }}
+                ></div>
             )}
-        </div>
+        </>
     );
 }
