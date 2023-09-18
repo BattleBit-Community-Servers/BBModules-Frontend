@@ -40,7 +40,11 @@ import {
     denyVersion,
     getModule,
 } from "../../../api/modules.tsx";
-import { Dependencies, ModuleData } from "../../../api/modules.types.ts";
+import {
+    Dependencies,
+    ModuleData,
+    Versions,
+} from "../../../api/modules.types.ts";
 import { UserContext } from "../../../api/user.tsx";
 
 export default function ModulePage() {
@@ -252,6 +256,28 @@ export default function ModulePage() {
                                         )
                                     )}
                                 </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Changelog</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {module?.versions.map((version: Versions) => (
+                                    <>
+                                        <h2 className="text-2xl font-bold mb-3">
+                                            {version.Version_v_number}
+                                        </h2>
+                                        <MarkdownPreview
+                                            className="bg-transparent"
+                                            source={rehype()
+                                                .use(rehypeSanitize)
+                                                .processSync(version.Version_changelog)
+                                                .toString()}
+                                        />
+                                    </>
+                                ))}
                             </CardContent>
                         </Card>
                     </div>
