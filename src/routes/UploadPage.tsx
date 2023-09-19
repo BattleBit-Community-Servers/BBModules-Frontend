@@ -3,19 +3,22 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
+import { Loader2 } from "lucide-react";
 
 export default function UploadPage() {
     const [loading, setLoading] = useState(false);
-    const [binaryDependencies, setBinaryDependencies] = useState([
-        { name: "" },
-    ]);
+    const [binaryDependencies, setBinaryDependencies] = useState<{ name: string }[]>([]);
+    const [newBinaryDependency, setNewBinaryDependency] = useState("");
     const [file, setFile] = useState(null as any);
     const [errorMessage, setErrorMessage] = useState("");
     const [moduleId, setModuleId] = useState(null as number | null);
     const [changelog, setChangelog] = useState("");
 
     const addDependency = () => {
-        setBinaryDependencies([...binaryDependencies, { name: "" }]);
+        if (!newBinaryDependency) return;
+
+        setBinaryDependencies([...binaryDependencies, { name: newBinaryDependency }]);
+        setNewBinaryDependency("");
     };
 
     const removeDependency = (index: number) => {
@@ -50,7 +53,7 @@ export default function UploadPage() {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/AddModule`, {
                 method: "POST",
                 body: formData,
-                credentials: "include",
+                credentials: "include"
             });
 
             if (response.ok) {
@@ -74,84 +77,100 @@ export default function UploadPage() {
     return (
         <>
             <h1 className="text-4xl font-bold mb-3">Upload a module</h1>
-            <p className="text-lg font-normal text-gray-400">
+            <p className="text-lg font-normal text-gray-400 mb-4">
                 Upload a new module to the repository or upload a new version of
                 one of your existing modules to update it.
             </p>
-            <h2 className="text-2xl font-bold mb-3">Binary dependencies</h2>
-            <p className="text-lg font-normal text-gray-400">
-                If your module depends on any binaries, you can specify them
-                here. Use one field per dependency.
-            </p>
-            {binaryDependencies.map((dependency, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                    <Input
-                        type="text"
-                        value={dependency.name}
-                        onChange={(e) => handleDependencyChange(index, e)}
-                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
-                    />
-                    <Button
-                        onClick={() => removeDependency(index)}
-                        className="bg-red-500 text-white rounded-md p-2 hover:bg-red-600 focus:outline-none"
-                    >
-                        -
-                    </Button>
-                </div>
-            ))}
-            <Button
-                onClick={addDependency}
-                className="bg-green-500 text-white rounded-md p-2 hover:bg-green-600 focus:outline-none"
-            >
-                +
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Binary dependencies</h2>
+                <p className="text-lg font-normal text-gray-400 mb-2">
+                    If your module depends on any binaries, you can specify them
+                    here. Use one field per dependency.
+                </p>
+
+                <ul className="space-y-2">
+                    {binaryDependencies.map((dependency, index) => (
+                        <li key={index} className="flex items-center space-x-2">
+                            <Input
+                                type="text"
+                                value={dependency.name}
+                                onChange={(e) => handleDependencyChange(index, e)}
+                                className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
+                            />
+                            <Button
+                                onClick={() => removeDependency(index)}
+                                className="bg-red-500 text-white rounded-md w-10 p-2 hover:bg-red-600 focus:outline-none"
+                            >
+                                -
+                            </Button>
+                        </li>
+                    ))}
+
+                    <li className="flex items-center space-x-2">
+                        <Input
+                            type="text"
+                            value={newBinaryDependency}
+                            onChange={(e) => setNewBinaryDependency(e.target.value)}
+                            className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
+                        />
+                        <Button
+                            onClick={() => addDependency()}
+                            className="bg-green-600 text-white rounded-md w-10 p-2 hover:bg-green-700 focus:outline-none"
+                        >
+                            +
+                        </Button>
+                    </li>
+                </ul>
+            </section>
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Changelog</h2>
+                <p className="text-lg font-normal text-gray-400 mb-2">
+                    Provide a changelog for this version of the module. If you leave
+                    this blank, the changelog will be set to "Initial upload" for
+                    new modules, or "No changelog provided" for existing modules.
+                </p>
+
+                <MDEditor
+                    value={changelog}
+                    onChange={(value) => {
+                        setChangelog(value || "");
+                    }}
+                    previewOptions={{
+                        rehypePlugins: [[rehypeSanitize]]
+                    }}
+                />
+            </section>
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Module file</h2>
+                <p className="text-lg font-normal text-gray-400 mb-2">
+                    Place your module .cs file here to upload it to the repository.
+                    It will be validated to check for compile-time errors, if there
+                    are no binary dependencies. Afterwards it will await approval by
+                    a moderator.
+                </p>
+
+                <Input type="file" onChange={handleFileChange} className="cursor-pointer file:text-white" />
+            </section>
+
+            <Button onClick={handleSubmit} disabled={loading}>
+                {loading ? (
+                    <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                    </>
+                ) : (
+                    <>Upload</>
+                )}
             </Button>
-            <h2 className="text-2xl font-bold mb-3">Changelog</h2>
-            <p className="text-lg font-normal text-gray-400">
-                Provide a changelog for this version of the module. If you leave
-                this blank, the changelog will be set to "Initial upload" for
-                new modules, or "No changelog provided" for existing modules.
-            </p>
-            <MDEditor
-                value={changelog}
-                onChange={(value) => {
-                    setChangelog(value || "");
-                }}
-                previewOptions={{
-                    rehypePlugins: [[rehypeSanitize]],
-                }}
-            />
-            <h2 className="text-2xl font-bold mb-3">Module file</h2>
-            <p className="text-lg font-normal text-gray-400">
-                Place your module .cs file here to upload it to the repository.
-                It will be validated to check for compile-time errors, if there
-                are no binary dependencies. Afterwards it will await approval by
-                a moderator.
-            </p>
-            <input
-                type="file"
-                onChange={handleFileChange}
-                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-500"
-            />
-            <Button
-                onClick={handleSubmit}
-                className="bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 focus:outline-none"
-            >
-                Upload
-            </Button>
-            {loading ? (
-                <div
-                    className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                    role="status"
-                    aria-label="loading"
-                >
-                    <span className="sr-only">Uploading and validating...</span>
-                </div>
-            ) : null}
+
             {errorMessage && (
                 <div
                     className="text-red-500"
                     dangerouslySetInnerHTML={{ __html: errorMessage }}
-                ></div>
+                />
             )}
         </>
     );
