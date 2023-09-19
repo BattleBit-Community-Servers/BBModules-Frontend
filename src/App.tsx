@@ -25,7 +25,7 @@ export default function App() {
                 theme={"dark"}
             />
             <BrowserRouter>
-                <div className="max-w-6xl mx-auto">
+                <div className="px-4 sm:px-6 max-w-6xl mx-auto">
                     <Navbar />
                     <Routes>
                         <Route
