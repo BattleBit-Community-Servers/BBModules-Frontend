@@ -1,23 +1,10 @@
-import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../../../components/ui/card.tsx";
 import { Button } from "../../../components/ui/button.tsx";
-import { Link } from "react-router-dom";
-import { BsDiscord } from "react-icons/bs";
 import { getModules } from "../../../api/modules.tsx";
 import { useEffect, useState } from "react";
 import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
 import { Input } from "../../../components/ui/input.tsx";
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    ChevronsLeftIcon,
-    ChevronsRightIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
+import { ModuleCard } from "../../components/modules/module-card.tsx";
 
 export default function ModuleListPage({ baseFilter = null as string | null }) {
     const minimumSearchLength = 4;
@@ -25,7 +12,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
     // Modules
     const [modules, setModules] = useState({
         count: 0,
-        results: [],
+        results: []
     } as FilteredModuleList);
 
     // Is loading
@@ -165,42 +152,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     {modules?.results.map((module: ModuleData) => (
-                        <Card
-                            key={module.Module_id}
-                            className="flex flex-col justify-between"
-                        >
-                            <CardHeader>
-                                <CardTitle>
-                                    <Link to={`/module/${module.Module_id}`}>
-                                        {module.Module_name}
-                                    </Link>
-                                </CardTitle>
-                                <CardDescription>
-                                    {module.Module_shortdesc}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardFooter className="flex justify-between">
-                                <div className="flex items-center gap-2 mr-2">
-                                    <BsDiscord className="mr-1 h-4 w-4" />@
-                                    {module.users.User_displayname}
-                                </div>
-                                <div className="flex gap-2">
-                                    <Link to={`/module/${module.Module_id}`}>
-                                        <Button variant="outline">View</Button>
-                                    </Link>
-                                    <Button
-                                        variant={
-                                            !module.versions[0].Version_approved
-                                                ? "destructive"
-                                                : "default"
-                                        }
-                                    >
-                                        Download v
-                                        {module.versions[0].Version_v_number}
-                                    </Button>
-                                </div>
-                            </CardFooter>
-                        </Card>
+                        <ModuleCard module={module} key={module.Module_id} />
                     ))}
                 </div>
                 {modules?.count > 1 && (
