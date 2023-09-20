@@ -12,20 +12,20 @@ const navItems = [
     {
         name: "Modules",
         path: "/modules",
-        icon: <IoExtensionPuzzle className="mr-2 h-4 w-4" />,
+        icon: <IoExtensionPuzzle className="h-4 w-4" />,
         key: "modules"
     },
     {
         name: "GitHub",
         url: "https://github.com/BattleBit-Community-Servers",
-        icon: <Github className="mr-2 h-4 w-4" />,
+        icon: <Github className="h-4 w-4" />,
         key: "github",
         target: "_blank"
     },
     {
         name: "Discord",
         url: "https://discord.gg/FTkj9xUvHh",
-        icon: <BsDiscord className="mr-2 h-4 w-4" />,
+        icon: <BsDiscord className="h-4 w-4" />,
         key: "discord",
         target: "_blank"
     }
@@ -39,11 +39,16 @@ export const Navbar = () => {
             <Link className="flex items-center gap-2" to={"/"}>
                 <img src="/img/logo.webp" alt="Logo" width={48} height={48} />
             </Link>
-            <div className="ml-auto flex items-center gap-4">
+            <div className="ml-auto flex items-center gap-2 sm:gap-4">
                 {navItems.map((item) => (
-                    <Link target={item.target} className="flex items-center" to={item.path ?? item.url} key={item.key}>
-                        {item.icon}
-                        <span>{item.name}</span>
+                    <Link
+                        target={item.target}
+                        className="flex items-center rounded px-2 py-2 transition-colors hover:bg-accent sm:gap-1 sm:px-4 sm:py-2"
+                        to={item.path ?? item.url}
+                        key={item.key}
+                    >
+                        <span className="text-white">{item.icon}</span>
+                        <span className="hidden sm:inline-block">{item.name}</span>
                     </Link>
                 ))}
                 {user ? (
