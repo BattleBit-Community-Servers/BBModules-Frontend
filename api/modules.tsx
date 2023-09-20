@@ -1,6 +1,6 @@
 import { FilteredModuleList, ModuleData } from "./modules.types";
 
-export const apiUrl = "https://apirunner.mevng.net";
+export const apiUrl = import.meta.env.VITE_API_URL;
 
 export async function getModules(
     page: number,
