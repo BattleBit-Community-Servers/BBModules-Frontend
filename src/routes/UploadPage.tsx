@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { apiUrl } from "../../api/modules";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
@@ -48,7 +47,7 @@ export default function UploadPage() {
             );
             formData.append("changelog", changelog);
 
-            const response = await fetch(`${apiUrl}/Modules/AddModule`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/AddModule`, {
                 method: "POST",
                 body: formData,
                 credentials: "include",

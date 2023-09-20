@@ -1,7 +1,5 @@
 import { FilteredModuleList, ModuleData } from "./modules.types";
 
-export const apiUrl = "https://apirunner.mevng.net";
-
 export async function getModules(
     page: number,
     search = "",
@@ -12,7 +10,7 @@ export async function getModules(
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     const response = await fetch(
-        `${apiUrl}/Modules/GetModules?page=${page}${
+        `${import.meta.env.VITE_API_URL}/Modules/GetModules?page=${page}${
             search ? `&search=${encodeURIComponent(search)}` : ""
         }${
             filter ? `&filter=${encodeURIComponent(filter)}` : ""
@@ -32,7 +30,7 @@ export async function getModules(
 }
 
 export async function getModule(id: number): Promise<ModuleData> {
-    const response = await fetch(`${apiUrl}/Modules/GetModule/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/GetModule/${id}`, {
         credentials: "include",
     });
     const data = await response.json();
@@ -40,7 +38,7 @@ export async function getModule(id: number): Promise<ModuleData> {
 }
 
 export async function approveVersion(id: number): Promise<boolean> {
-    const response = await fetch(`${apiUrl}/admin/Review`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/Review`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -52,7 +50,7 @@ export async function approveVersion(id: number): Promise<boolean> {
 }
 
 export async function denyVersion(id: number): Promise<boolean> {
-    const response = await fetch(`${apiUrl}/admin/Review`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/Review`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -64,7 +62,7 @@ export async function denyVersion(id: number): Promise<boolean> {
 }
 
 export async function editMarkdown(id: number, markdown: string): Promise<boolean> {
-    const response = await fetch(`${apiUrl}/Modules/EditModule`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/EditModule`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
