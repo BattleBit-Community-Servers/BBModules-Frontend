@@ -1,11 +1,11 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card.tsx";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card.tsx";
 import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/button.tsx";
+import { Button } from "../ui/button.tsx";
 import { ModuleData } from "../../../api/modules.types.ts";
 import { BsDiscord } from "react-icons/bs";
 import { ImDownload, ImEye } from "react-icons/im";
-import { cn } from "../../../lib/utils.ts";
-import { Badge } from "../../../components/ui/badge.tsx";
+import { cn } from "../../lib/utils.ts";
+import { Badge } from "../ui/badge.tsx";
 
 const UnapprovedBadge = ({ className }: { className: string }) => (
     <Badge variant="danger" className={cn("pointer-events-none select-none tracking-normal", className)}>

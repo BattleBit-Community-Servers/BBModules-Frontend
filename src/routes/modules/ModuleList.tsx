@@ -1,8 +1,8 @@
-import { Button } from "../../../components/ui/button.tsx";
+import { Button } from "../../components/ui/button.tsx";
 import { getModules } from "../../../api/modules.tsx";
 import { useEffect, useState } from "react";
 import { FilteredModuleList, ModuleData } from "../../../api/modules.types";
-import { Input } from "../../../components/ui/input.tsx";
+import { Input } from "../../components/ui/input.tsx";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
 import { ModuleCard } from "../../components/modules/module-card.tsx";
 
@@ -99,10 +99,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
         input = input.trim();
 
         // Deleting search content down to < 3 characters should reset the page once
-        if (
-            input.length < minimumSearchLength &&
-            lastSearchTerm.length >= minimumSearchLength
-        ) {
+        if (input.length < minimumSearchLength && lastSearchTerm.length >= minimumSearchLength) {
             setSearchTooShort(input.length !== 0);
             setLastSearchTerm("");
             return;
@@ -127,10 +124,10 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
     return (
         <>
             <div className="px-6">
-                <h1 className="text-4xl font-bold mb-3">Modules</h1>
+                <h1 className="mb-3 text-4xl font-bold">Modules</h1>
                 {loading && (
                     <div className="flex justify-center">
-                        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+                        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
                     </div>
                 )}
                 {error && <div className="text-red-500">{error}</div>}
@@ -139,25 +136,19 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                     placeholder="Search"
                     value={search}
                     onChange={(e) => searchModules(e.target.value)}
-                    className={`mb-3 ${
-                        search.length < 4 && search.length !== 0
-                            ? "border border-red-500"
-                            : ""
-                    }`}
+                    className={`mb-3 ${search.length < 4 && search.length !== 0 ? "border border-red-500" : ""}`}
                 />
-                <div className="text-red-500 mb-3">
-                    {searchTooShort
-                        ? "Please provide at least 4 characters for searching"
-                        : null}
+                <div className="mb-3 text-red-500">
+                    {searchTooShort ? "Please provide at least 4 characters for searching" : null}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
                     {modules?.results.map((module: ModuleData) => (
                         <ModuleCard module={module} key={module.Module_id} />
                     ))}
                 </div>
                 {modules?.count > 1 && (
                     <>
-                        <div className="flex items-center justify-end space-x-6 lg:space-x-8 mt-3">
+                        <div className="mt-3 flex items-center justify-end space-x-6 lg:space-x-8">
                             <div className="flex w-[100px] items-center justify-center text-sm font-medium">
                                 Page {modulesPage} of {modules.count}
                             </div>
@@ -168,9 +159,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                                     onClick={() => goToFirstPage()}
                                     disabled={modulesPage === 1}
                                 >
-                                    <span className="sr-only">
-                                        Go to first page
-                                    </span>
+                                    <span className="sr-only">Go to first page</span>
                                     <ChevronsLeftIcon className="h-4 w-4" />
                                 </Button>
                                 <Button
@@ -179,9 +168,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                                     onClick={() => goToPreviousPage()}
                                     disabled={modulesPage === 1}
                                 >
-                                    <span className="sr-only">
-                                        Go to previous page
-                                    </span>
+                                    <span className="sr-only">Go to previous page</span>
                                     <ChevronLeftIcon className="h-4 w-4" />
                                 </Button>
                                 <Button
@@ -190,9 +177,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                                     onClick={() => goToNextPage()}
                                     disabled={modulesPage === modules.count}
                                 >
-                                    <span className="sr-only">
-                                        Go to next page
-                                    </span>
+                                    <span className="sr-only">Go to next page</span>
                                     <ChevronRightIcon className="h-4 w-4" />
                                 </Button>
                                 <Button
@@ -201,9 +186,7 @@ export default function ModuleListPage({ baseFilter = null as string | null }) {
                                     onClick={() => goToLastPage()}
                                     disabled={modulesPage === modules.count}
                                 >
-                                    <span className="sr-only">
-                                        Go to last page
-                                    </span>
+                                    <span className="sr-only">Go to last page</span>
                                     <ChevronsRightIcon className="h-4 w-4" />
                                 </Button>
                             </div>
