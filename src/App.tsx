@@ -3,7 +3,7 @@ import NotFound from "./routes/404.tsx";
 import ModulePage from "./routes/modules/ModulePage.tsx";
 import ModuleListPage from "./routes/modules/ModuleList.tsx";
 import { Navbar } from "./components/nav/navbar.tsx";
-import { Footer } from "./components/footer/Footer.tsx";
+import { Footer } from "./components/footer/footer.tsx";
 import { Slide, ToastContainer } from "react-toastify";
 import Privacy from "./routes/Privacy.tsx";
 import UploadPage from "./routes/UploadPage.tsx";
