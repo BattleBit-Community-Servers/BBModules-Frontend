@@ -1,22 +1,22 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card.tsx";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card.tsx";
 import { History } from "lucide-react";
-import { Button } from "../../../components/ui/button.tsx";
+import { Button } from "../../components/ui/button.tsx";
 import MDEditor from "@uiw/react-md-editor";
-import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert.tsx";
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert.tsx";
 import { Link, useParams } from "react-router-dom";
 import { ImDownload } from "react-icons/im";
 import { BsDiscord } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../../../components/ui/sheet.tsx";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs.tsx";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../../components/ui/sheet.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs.tsx";
 import rehypeSanitize from "rehype-sanitize";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { rehype } from "rehype";
 import { approveVersion, denyVersion, editMarkdown, getModule } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData, Versions } from "../../../api/modules.types.ts";
 import { UserContext } from "../../../api/user.tsx";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table.tsx";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table.tsx";
 import { HiExternalLink } from "react-icons/hi";
 
 const ModuleApprovalAlert = ({ version, approvable }: { version: Versions; approvable: boolean }) => {

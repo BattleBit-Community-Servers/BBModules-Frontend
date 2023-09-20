@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { Loader2 } from "lucide-react";
@@ -44,10 +44,7 @@ export default function UploadPage() {
         try {
             const formData = new FormData();
             formData.append("file", file);
-            formData.append(
-                "binary_dependencies",
-                JSON.stringify(binaryDependencies)
-            );
+            formData.append("binary_dependencies", JSON.stringify(binaryDependencies));
             formData.append("changelog", changelog);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/AddModule`, {
@@ -76,17 +73,16 @@ export default function UploadPage() {
 
     return (
         <>
-            <h1 className="text-4xl font-bold mb-3">Upload a module</h1>
-            <p className="text-lg font-normal text-gray-400 mb-4">
-                Upload a new module to the repository or upload a new version of
-                one of your existing modules to update it.
+            <h1 className="mb-3 text-4xl font-bold">Upload a module</h1>
+            <p className="mb-4 text-lg font-normal text-gray-400">
+                Upload a new module to the repository or upload a new version of one of your existing modules to update
+                it.
             </p>
 
             <section className="mb-4">
                 <h2 className="text-2xl font-bold">Binary dependencies</h2>
-                <p className="text-lg font-normal text-gray-400 mb-2">
-                    If your module depends on any binaries, you can specify them
-                    here. Use one field per dependency.
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    If your module depends on any binaries, you can specify them here. Use one field per dependency.
                 </p>
 
                 <ul className="space-y-2">
@@ -96,11 +92,11 @@ export default function UploadPage() {
                                 type="text"
                                 value={dependency.name}
                                 onChange={(e) => handleDependencyChange(index, e)}
-                                className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
+                                className="w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring"
                             />
                             <Button
                                 onClick={() => removeDependency(index)}
-                                className="bg-red-500 text-white rounded-md w-10 p-2 hover:bg-red-600 focus:outline-none"
+                                className="w-10 rounded-md bg-red-500 p-2 text-white hover:bg-red-600 focus:outline-none"
                             >
                                 -
                             </Button>
@@ -112,11 +108,11 @@ export default function UploadPage() {
                             type="text"
                             value={newBinaryDependency}
                             onChange={(e) => setNewBinaryDependency(e.target.value)}
-                            className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
+                            className="w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring"
                         />
                         <Button
                             onClick={() => addDependency()}
-                            className="bg-green-600 text-white rounded-md w-10 p-2 hover:bg-green-700 focus:outline-none"
+                            className="w-10 rounded-md bg-green-600 p-2 text-white hover:bg-green-700 focus:outline-none"
                         >
                             +
                         </Button>
@@ -126,10 +122,9 @@ export default function UploadPage() {
 
             <section className="mb-4">
                 <h2 className="text-2xl font-bold">Changelog</h2>
-                <p className="text-lg font-normal text-gray-400 mb-2">
-                    Provide a changelog for this version of the module. If you leave
-                    this blank, the changelog will be set to "Initial upload" for
-                    new modules, or "No changelog provided" for existing modules.
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    Provide a changelog for this version of the module. If you leave this blank, the changelog will be
+                    set to "Initial upload" for new modules, or "No changelog provided" for existing modules.
                 </p>
 
                 <MDEditor
@@ -145,11 +140,10 @@ export default function UploadPage() {
 
             <section className="mb-4">
                 <h2 className="text-2xl font-bold">Module file</h2>
-                <p className="text-lg font-normal text-gray-400 mb-2">
-                    Place your module .cs file here to upload it to the repository.
-                    It will be validated to check for compile-time errors, if there
-                    are no binary dependencies. Afterwards it will await approval by
-                    a moderator.
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    Place your module .cs file here to upload it to the repository. It will be validated to check for
+                    compile-time errors, if there are no binary dependencies. Afterwards it will await approval by a
+                    moderator.
                 </p>
 
                 <Input type="file" onChange={handleFileChange} className="cursor-pointer file:text-white" />
@@ -166,12 +160,7 @@ export default function UploadPage() {
                 )}
             </Button>
 
-            {errorMessage && (
-                <div
-                    className="text-red-500"
-                    dangerouslySetInnerHTML={{ __html: errorMessage }}
-                />
-            )}
+            {errorMessage && <div className="text-red-500" dangerouslySetInnerHTML={{ __html: errorMessage }} />}
         </>
     );
 }
