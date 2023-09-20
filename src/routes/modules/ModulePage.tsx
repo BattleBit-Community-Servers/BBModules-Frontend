@@ -35,7 +35,6 @@ import rehypeSanitize from "rehype-sanitize";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { rehype } from "rehype";
 import {
-    apiUrl,
     approveVersion,
     denyVersion,
     getModule,
@@ -314,7 +313,7 @@ export default function ModulePage() {
                                 {module?.versions[0].Version_v_number}
                             </p>
                             <Link
-                                to={`${apiUrl}/Download/${module?.Module_name}/latest`}
+                                to={`${import.meta.env.API_URL}/Download/${module?.Module_name}/latest`}
                             >
                                 <Button className="w-full">
                                     <ImDownload className="mr-2 h-4 w-4" />{" "}
@@ -442,7 +441,7 @@ export default function ModulePage() {
                                                       {version.Version_v_number}
                                                   </p>
                                                   <Link
-                                                      to={`${apiUrl}/Download/${module?.Module_name}/${version.Version_v_number}`}
+                                                      to={`${import.meta.env.API_URL}/Download/${module?.Module_name}/${version.Version_v_number}`}
                                                   >
                                                       <Button
                                                           variant={"outline"}

@@ -6,7 +6,6 @@ import { UserDropdownMenu } from "./UserDropdownMenu.tsx";
 import { Button } from "../../ui/button.tsx";
 import { Github } from "lucide-react";
 import { BsDiscord } from "react-icons/bs";
-import { apiUrl } from "../../../api/modules.tsx";
 import { useContext } from "react";
 
 const navItems = [
@@ -58,7 +57,7 @@ export const Navbar = () => {
                     </div>
                 ) : (
                     <div className="flex items-center gap-2 ml-auto">
-                        <a href={`${apiUrl}/auth/discord`}>
+                        <a href={`${import.meta.env.API_URL}/auth/discord`}>
                             <Button>
                                 <span className="flex items-center gap-2">
                                     <MdLogin />
