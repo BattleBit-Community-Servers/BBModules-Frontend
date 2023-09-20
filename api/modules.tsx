@@ -5,6 +5,7 @@ export const apiUrl = "https://apirunner.mevng.net";
 export async function getModules(
     page: number,
     search = "",
+    filter = "",
     timeoutMs = 5000
 ): Promise<FilteredModuleList> {
     const controller = new AbortController();
@@ -13,6 +14,8 @@ export async function getModules(
     const response = await fetch(
         `${apiUrl}/Modules/GetModules?page=${page}${
             search ? `&search=${encodeURIComponent(search)}` : ""
+        }${
+            filter ? `&filter=${encodeURIComponent(filter)}` : ""
         }`,
         { signal: controller.signal, credentials: "include" }
     );

@@ -36,6 +36,7 @@ export default function App() {
                         <Route path={"/modules"} element={<ModuleListPage />} />
                         <Route path={"/upload"} element={<UploadPage />} />
                         <Route path={"/privacy"} element={<Privacy />} />
+                        <Route path={"/admin/modules"} element={<ModuleListPage baseFilter="unapproved" />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                     <Footer />

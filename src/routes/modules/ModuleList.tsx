@@ -19,7 +19,7 @@ import {
     ChevronsRightIcon,
 } from "lucide-react";
 
-export default function ModuleListPage() {
+export default function ModuleListPage({ baseFilter = null as string | null }) {
     const minimumSearchLength = 4;
 
     // Modules
@@ -53,7 +53,7 @@ export default function ModuleListPage() {
         } else {
             fetchModules();
         }
-    }, [lastSearchTerm]);
+    }, [lastSearchTerm, baseFilter]);
 
     const fetchModules = async () => {
         // Prevents a flash of loading state/error when loading/error is fast
@@ -63,7 +63,7 @@ export default function ModuleListPage() {
         }, 500);
 
         try {
-            const modules = await getModules(modulesPage, lastSearchTerm);
+            const modules = await getModules(modulesPage, lastSearchTerm, baseFilter ?? "");
             console.log(modules);
             setModules(modules);
             setError(null);
