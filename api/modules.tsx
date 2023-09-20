@@ -62,3 +62,15 @@ export async function denyVersion(id: number): Promise<boolean> {
     });
     return response.ok;
 }
+
+export async function editMarkdown(id: number, markdown: string): Promise<boolean> {
+    const response = await fetch(`${apiUrl}/Modules/EditModule`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: id, markdown: markdown }),
+        credentials: "include",
+    });
+    return response.ok;
+}
