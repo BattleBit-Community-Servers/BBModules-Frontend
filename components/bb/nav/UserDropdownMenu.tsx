@@ -10,6 +10,7 @@ import {
 } from "../../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../../../api/modules.tsx";
 import { useContext } from "react";
 import { UserContext } from "../../../api/user.tsx";
 
@@ -40,7 +41,7 @@ export function UserDropdownMenu() {
                     </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <a href={`${import.meta.env.API_URL}/auth/logout`}>
+                <a href={`${apiUrl}/auth/logout`}>
                     <DropdownMenuItem className="cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Log out</span>

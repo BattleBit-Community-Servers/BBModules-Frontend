@@ -1,5 +1,7 @@
 import { FilteredModuleList, ModuleData } from "./modules.types";
 
+export const apiUrl = "https://apirunner.mevng.net";
+
 export async function getModules(
     page: number,
     search = "",
@@ -9,7 +11,7 @@ export async function getModules(
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
     const response = await fetch(
-        `${import.meta.env.API_URL}/Modules/GetModules?page=${page}${
+        `${apiUrl}/Modules/GetModules?page=${page}${
             search ? `&search=${encodeURIComponent(search)}` : ""
         }`,
         { signal: controller.signal, credentials: "include" }
@@ -27,7 +29,7 @@ export async function getModules(
 }
 
 export async function getModule(id: number): Promise<ModuleData> {
-    const response = await fetch(`${import.meta.env.API_URL}/Modules/GetModule/${id}`, {
+    const response = await fetch(`${apiUrl}/Modules/GetModule/${id}`, {
         credentials: "include",
     });
     const data = await response.json();
@@ -35,7 +37,7 @@ export async function getModule(id: number): Promise<ModuleData> {
 }
 
 export async function approveVersion(id: number): Promise<boolean> {
-    const response = await fetch(`${import.meta.env.API_URL}/admin/Review`, {
+    const response = await fetch(`${apiUrl}/admin/Review`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -47,7 +49,7 @@ export async function approveVersion(id: number): Promise<boolean> {
 }
 
 export async function denyVersion(id: number): Promise<boolean> {
-    const response = await fetch(`${import.meta.env.API_URL}/admin/Review`, {
+    const response = await fetch(`${apiUrl}/admin/Review`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
