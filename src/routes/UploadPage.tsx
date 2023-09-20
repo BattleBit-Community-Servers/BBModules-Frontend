@@ -4,6 +4,8 @@ import { Input } from "../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ModuleData } from "../../api/modules.types.ts";
 
 export default function UploadPage() {
     const [loading, setLoading] = useState(false);
@@ -11,8 +13,8 @@ export default function UploadPage() {
     const [newBinaryDependency, setNewBinaryDependency] = useState("");
     const [file, setFile] = useState(null as any);
     const [errorMessage, setErrorMessage] = useState("");
-    const [moduleId, setModuleId] = useState(null as number | null);
     const [changelog, setChangelog] = useState("");
+    const navigate = useNavigate();
 
     const addDependency = () => {
         if (!newBinaryDependency) return;
@@ -54,8 +56,8 @@ export default function UploadPage() {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                setModuleId(data.Module_id);
+                const data = (await response.json()) as ModuleData;
+                navigate(`/module/${data.Module_id}`, { replace: true });
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message.replace(/\n/g, "<br>"));
@@ -66,10 +68,6 @@ export default function UploadPage() {
             setLoading(false);
         }
     };
-
-    if (moduleId) {
-        window.location.href = `/module/${moduleId}`;
-    }
 
     return (
         <>
