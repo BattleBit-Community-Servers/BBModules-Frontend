@@ -3,7 +3,7 @@ import { History } from "lucide-react";
 import { Button } from "../../components/ui/button.tsx";
 import MDEditor from "@uiw/react-md-editor";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert.tsx";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ImDownload } from "react-icons/im";
 import { BsDiscord } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
@@ -226,6 +226,7 @@ export default function ModulePage() {
     const { id = "" } = useParams();
 
     const user = useContext(UserContext);
+    const navigate = useNavigate();
 
     // Modules
     const [module, setModule] = useState<ModuleData>();
@@ -237,7 +238,7 @@ export default function ModulePage() {
                 const module = await getModule(parseInt(id));
 
                 if (module.versions.length === 0) {
-                    window.location.href = "/404";
+                    navigate("/404", { replace: true });
                 }
 
                 setModule(module);
