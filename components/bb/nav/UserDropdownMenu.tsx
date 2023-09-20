@@ -1,4 +1,4 @@
-import { LogOut, Upload } from "lucide-react";
+import { LogOut, ShieldCheck, Upload } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -41,6 +41,20 @@ export function UserDropdownMenu() {
                     </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
+                {user?.User_roles === "ADMIN" ||
+                user?.User_roles === "MODERATOR" ? (
+                    <>
+                        <DropdownMenuGroup>
+                            <Link to="/admin/modules">
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <ShieldCheck className="mr-2 h-4 w-4" />
+                                    <span>Moderate</span>
+                                </DropdownMenuItem>
+                            </Link>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                    </>
+                ) : null}
                 <a href={`${apiUrl}/auth/logout`}>
                     <DropdownMenuItem className="cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" />
