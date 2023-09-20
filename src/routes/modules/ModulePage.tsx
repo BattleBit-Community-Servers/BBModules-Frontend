@@ -38,6 +38,7 @@ import {
     apiUrl,
     approveVersion,
     denyVersion,
+    editMarkdown,
     getModule,
 } from "../../../api/modules.tsx";
 import {
@@ -94,6 +95,16 @@ export default function ModulePage() {
         setModuleMarkdown(
             rehype().use(rehypeSanitize).processSync(module_markdown).toString()
         );
+
+        if (module_markdown) {
+            if (await editMarkdown(module?.Module_id ?? -1, module_markdown)) {
+                toast.success("Module saved!");
+            } else {
+                toast.error("Failed to save module!");
+            }
+        } else {
+            toast.error("Failed to save module!");
+        }
     };
 
     const approvable =
