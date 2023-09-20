@@ -162,7 +162,8 @@ export default function ModulePage() {
                                                 Save
                                             </Button>
                                         </div>
-                                    ) : (
+                                    ) : user?.User_discord_id ==
+                                      module?.users.User_discord_id || user?.User_roles == "ADMIN" || user?.User_roles == "MODERATOR" ? (
                                         <Button
                                             variant="outline"
                                             className="ml-auto"
@@ -170,7 +171,7 @@ export default function ModulePage() {
                                         >
                                             Edit
                                         </Button>
-                                    )}
+                                    ) : null}
                                 </div>
                             </CardHeader>
                             <CardContent>
