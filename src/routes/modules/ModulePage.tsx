@@ -10,14 +10,12 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../../components/ui/sheet.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs.tsx";
-import rehypeSanitize from "rehype-sanitize";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import { rehype } from "rehype";
 import { approveVersion, denyVersion, editMarkdown, getModule } from "../../../api/modules.tsx";
 import { Dependencies, ModuleData, Versions } from "../../../api/modules.types.ts";
 import { UserContext } from "../../../api/user.tsx";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table.tsx";
 import { HiExternalLink } from "react-icons/hi";
+import { SanitizedMarkdown } from "../../components/common/sanitized-markdown.tsx";
 import { cn } from "../../lib/utils.ts";
 
 const ModuleApprovalAlert = ({ version, approvable }: { version: Versions; approvable: boolean }) => {
@@ -262,7 +260,7 @@ export default function ModulePage() {
     // TODO: Implement module save
     const saveModule = async () => {
         setIsEditingModule(false);
-        setModuleMarkdown(rehype().use(rehypeSanitize).processSync(module_markdown).toString());
+        setModuleMarkdown(module_markdown);
 
         if (module_markdown) {
             if (await editMarkdown(module?.Module_id ?? -1, module_markdown)) {
@@ -323,17 +321,19 @@ export default function ModulePage() {
                             <CardContent>
                                 <div>
                                     {isEditingModule ? (
-                                        <MDEditor
-                                            value={module_markdown}
-                                            onChange={(value) => {
-                                                setModuleMarkdown(value || "");
-                                            }}
-                                            previewOptions={{
-                                                rehypePlugins: [[rehypeSanitize]]
-                                            }}
-                                        />
+                                        <>
+                                            <p className="my-2 flex items-center text-yellow-500">
+                                                Note: Only images hosted on imgur are allowed. HTML is not allowed.
+                                            </p>
+                                            <MDEditor
+                                                value={module_markdown}
+                                                onChange={(value) => {
+                                                    setModuleMarkdown(value || "");
+                                                }}
+                                            />
+                                        </>
                                     ) : (
-                                        <MarkdownPreview className="bg-transparent" source={module_markdown} />
+                                        <SanitizedMarkdown markdown={module_markdown!} />
                                     )}
                                 </div>
                             </CardContent>
@@ -349,13 +349,7 @@ export default function ModulePage() {
                                 {module?.versions.map((version: Versions) => (
                                     <div key={version.Version_id} className="mb-2">
                                         <h3 className="text-2xl font-bold">{version.Version_v_number}</h3>
-                                        <MarkdownPreview
-                                            className="bg-transparent"
-                                            source={rehype()
-                                                .use(rehypeSanitize)
-                                                .processSync(version.Version_changelog)
-                                                .toString()}
-                                        />
+                                        <SanitizedMarkdown markdown={version.Version_changelog} />
                                     </div>
                                 ))}
                             </CardContent>
