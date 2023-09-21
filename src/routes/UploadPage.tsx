@@ -43,10 +43,15 @@ export default function UploadPage() {
         setLoading(true);
         setErrorMessage("");
 
+        let dependencies = binaryDependencies;
+        if (newBinaryDependency) {
+            dependencies = [...binaryDependencies, { name: newBinaryDependency }];
+        }
+
         try {
             const formData = new FormData();
             formData.append("file", file);
-            formData.append("binary_dependencies", JSON.stringify(binaryDependencies));
+            formData.append("binary_dependencies", JSON.stringify(dependencies));
             formData.append("changelog", changelog);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/AddModule`, {
@@ -73,14 +78,15 @@ export default function UploadPage() {
         <>
             <h1 className="mb-3 text-4xl font-bold">Upload a module</h1>
             <p className="mb-4 text-lg font-normal text-gray-400">
-                Upload a new module to the repository or upload a new version of one of your existing modules to update
-                it.
+                You can utilize this section to upload a new module to our repository or submit a new version of an
+                existing module for updates
             </p>
 
             <section className="mb-4">
                 <h2 className="text-2xl font-bold">Binary dependencies</h2>
                 <p className="mb-2 text-lg font-normal text-gray-400">
-                    If your module depends on any binaries, you can specify them here. Use one field per dependency.
+                    If your module relies on any binary dependencies, please specify them in the fields below. Use a
+                    separate field for each dependency.
                 </p>
 
                 <ul className="space-y-2">
@@ -121,10 +127,13 @@ export default function UploadPage() {
             <section className="mb-4">
                 <h2 className="text-2xl font-bold">Changelog</h2>
                 <p className="mb-2 text-lg font-normal text-gray-400">
-                    Provide a changelog for this version of the module. If you leave this blank, the changelog will be
-                    set to "Initial upload" for new modules, or "No changelog provided" for existing modules.
+                    Please provide a detailed changelog for this version of the module. Leaving this section blank will
+                    result in the changelog being set to "Initial upload" for new modules or "No changelog provided" for
+                    existing ones.
                 </p>
-
+                <p className="my-2 flex items-center text-yellow-500">
+                    Note: Only images hosted on imgur are allowed. HTML is not allowed.
+                </p>
                 <MDEditor
                     value={changelog}
                     onChange={(value) => {
