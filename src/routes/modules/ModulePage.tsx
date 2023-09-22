@@ -198,15 +198,15 @@ const Sidebar = ({ module }: { module: ModuleData }) => {
                                           <History className="mr-2 h-4 w-4" />
                                           {version.Version_v_number}
                                       </p>
-                                      <Link
-                                          to={`${import.meta.env.VITE_API_URL}/Download/${module.Module_name}/${
+                                      <a
+                                          href={`${import.meta.env.VITE_API_URL}/Download/${module.Module_name}/${
                                               version.Version_v_number
                                           }`}
                                       >
                                           <Button variant={"outline"} size={"sm"}>
                                               Download
                                           </Button>
-                                      </Link>
+                                      </a>
                                   </div>
                               ))
                             : "None"}

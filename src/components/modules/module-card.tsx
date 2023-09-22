@@ -43,13 +43,14 @@ export const ModuleCard = ({ module }: { module: ModuleData }) => {
             </CardHeader>
 
             <CardFooter className="flex justify-end gap-2">
-                <Button
-                    variant={isApproved ? "default" : undefined}
-                    className={cn("px-[14px]", !isApproved && "bg-red-500 hover:bg-red-600")}
-                >
-                    <ImDownload className="h-4 w-4" />
-                </Button>
-
+                <a href={`${import.meta.env.VITE_API_URL}/Download/${module.Module_name}/latest`}>
+                    <Button
+                        variant={isApproved ? "default" : undefined}
+                        className={cn("px-[14px]", !isApproved && "bg-red-500 hover:bg-red-600")}
+                    >
+                        <ImDownload className="h-4 w-4" />
+                    </Button>
+                </a>
                 <Link to={`/module/${module.Module_id}`}>
                     <Button variant="outline">
                         <ImEye className="mr-2 h-4 w-4" />
