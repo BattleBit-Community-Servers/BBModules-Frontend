@@ -28,23 +28,23 @@ export function UserDropdownMenu() {
                 <DropdownMenuLabel>Logged in as {user!.User_displayname}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <Link to="/upload">
+                    <a href="/upload">
                         <DropdownMenuItem className="cursor-pointer">
                             <Upload className="mr-2 h-4 w-4" />
                             <span>Upload module</span>
                         </DropdownMenuItem>
-                    </Link>
+                    </a>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 {user?.User_roles === "ADMIN" || user?.User_roles === "MODERATOR" ? (
                     <>
                         <DropdownMenuGroup>
-                            <Link to="/admin/modules">
+                            <a href="/admin/modules">
                                 <DropdownMenuItem className="cursor-pointer">
                                     <ShieldCheck className="mr-2 h-4 w-4" />
                                     <span>Moderate</span>
                                 </DropdownMenuItem>
-                            </Link>
+                            </a>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                     </>
