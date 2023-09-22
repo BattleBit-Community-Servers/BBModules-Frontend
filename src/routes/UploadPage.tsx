@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
@@ -11,7 +11,7 @@ export default function UploadPage() {
     const [loading, setLoading] = useState(false);
     const [binaryDependencies, setBinaryDependencies] = useState<{ name: string }[]>([]);
     const [newBinaryDependency, setNewBinaryDependency] = useState("");
-    const [file, setFile] = useState(null as any);
+    const [file, setFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState("");
     const [changelog, setChangelog] = useState("");
     const navigate = useNavigate();
@@ -35,13 +35,25 @@ export default function UploadPage() {
         setBinaryDependencies(newDependencies);
     };
 
-    const handleFileChange = (event: any) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files || event.target.files.length === 0) {
+            setFile(null);
+            return;
+        }
+
+        console.log(event.target.files[0].name);
+
         setFile(event.target.files[0]);
     };
 
     const handleSubmit = async () => {
         setLoading(true);
         setErrorMessage("");
+        if (!file) {
+            setErrorMessage("Please select a file to upload.");
+            setLoading(false);
+            return;
+        }
 
         let dependencies = binaryDependencies;
         if (newBinaryDependency) {
@@ -66,6 +78,7 @@ export default function UploadPage() {
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message.replace(/\n/g, "<br>"));
+                setFile(null);
             }
         } catch (error) {
             setErrorMessage("An error occurred while uploading the module.");
@@ -153,21 +166,24 @@ export default function UploadPage() {
                     moderator.
                 </p>
 
+                {errorMessage && <p className="text-amber-500">We've removed the file from the file selector!</p>}
                 <Input type="file" onChange={handleFileChange} className="cursor-pointer file:text-white" />
             </section>
 
-            <Button onClick={handleSubmit} disabled={loading}>
-                {loading ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Please wait
-                    </>
-                ) : (
-                    <>Upload</>
-                )}
-            </Button>
+            <div className="flex items-center gap-2">
+                <Button onClick={handleSubmit} disabled={loading}>
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Please wait
+                        </>
+                    ) : (
+                        <>Upload</>
+                    )}
+                </Button>
 
-            {errorMessage && <div className="text-red-500" dangerouslySetInnerHTML={{ __html: errorMessage }} />}
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            </div>
         </>
     );
 }
