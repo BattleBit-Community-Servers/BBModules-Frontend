@@ -134,14 +134,16 @@ const ApprovalSidebar = ({ versionId }: { versionId: number }) => {
                                 <SheetClose asChild>
                                     <Button
                                         type="submit"
-                                        onClick={
-                                            () =>
-                                                toast.promise(denyVersion(versionId), {
+                                        onClick={() =>
+                                            toast.promise(
+                                                denyVersion(versionId),
+                                                {
                                                     pending: "Denying module...",
                                                     success: "Module denied!",
                                                     error: "Failed to deny module!"
-                                                })
-                                            //   TODO: make toast of denial yellow
+                                                },
+                                                { type: "warning" }
+                                            )
                                         }
                                     >
                                         Deny
