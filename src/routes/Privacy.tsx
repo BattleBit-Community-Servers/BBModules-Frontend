@@ -1,6 +1,6 @@
 export default function Privacy() {
     return (
-        <div>
+        <div className="markdown">
             <h1>Privacy Notice</h1>
             <p>Last Updated: 22.09.2023</p>
 
