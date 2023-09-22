@@ -7,7 +7,7 @@ import { ImDownload, ImEye } from "react-icons/im";
 import { cn } from "../../lib/utils.ts";
 import { Badge } from "../ui/badge.tsx";
 
-const UnapprovedBadge = ({ className }: { className: string }) => (
+const UnapprovedBadge = ({ className }: { className?: string }) => (
     <Badge variant="danger" className={cn("pointer-events-none select-none tracking-normal", className)}>
         Unapproved
     </Badge>
@@ -30,7 +30,7 @@ export const ModuleCard = ({ module }: { module: ModuleData }) => {
                             )}
                         </div>
 
-                        {!isApproved && <UnapprovedBadge className="" />}
+                        {!isApproved && <UnapprovedBadge />}
                     </Link>
                 </CardTitle>
 
@@ -44,10 +44,7 @@ export const ModuleCard = ({ module }: { module: ModuleData }) => {
 
             <CardFooter className="flex justify-end gap-2">
                 <a href={`${import.meta.env.VITE_API_URL}/Download/${module.Module_name}/latest`}>
-                    <Button
-                        variant={isApproved ? "default" : undefined}
-                        className={cn("px-[14px]", !isApproved && "bg-red-500 hover:bg-red-600")}
-                    >
+                    <Button variant={isApproved ? "default" : "danger"}>
                         <ImDownload className="h-4 w-4" />
                     </Button>
                 </a>

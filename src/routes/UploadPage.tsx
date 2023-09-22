@@ -131,7 +131,7 @@ export default function UploadPage() {
                     result in the changelog being set to "Initial upload" for new modules or "No changelog provided" for
                     existing ones.
                 </p>
-                <p className="my-2 flex items-center text-yellow-500">
+                <p className="my-2 flex items-center text-amber-500">
                     Note: Only images hosted on imgur are allowed. HTML is not allowed.
                 </p>
                 <MDEditor
