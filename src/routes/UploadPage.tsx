@@ -1,21 +1,26 @@
-import { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { ChangeEvent, useState } from "react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ModuleData } from "../../api/modules.types.ts";
 
 export default function UploadPage() {
     const [loading, setLoading] = useState(false);
-    const [binaryDependencies, setBinaryDependencies] = useState([
-        { name: "" },
-    ]);
-    const [file, setFile] = useState(null as any);
+    const [binaryDependencies, setBinaryDependencies] = useState<{ name: string }[]>([]);
+    const [newBinaryDependency, setNewBinaryDependency] = useState("");
+    const [file, setFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState("");
-    const [moduleId, setModuleId] = useState(null as number | null);
     const [changelog, setChangelog] = useState("");
+    const navigate = useNavigate();
 
     const addDependency = () => {
-        setBinaryDependencies([...binaryDependencies, { name: "" }]);
+        if (!newBinaryDependency) return;
+
+        setBinaryDependencies([...binaryDependencies, { name: newBinaryDependency }]);
+        setNewBinaryDependency("");
     };
 
     const removeDependency = (index: number) => {
@@ -30,35 +35,50 @@ export default function UploadPage() {
         setBinaryDependencies(newDependencies);
     };
 
-    const handleFileChange = (event: any) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files || event.target.files.length === 0) {
+            setFile(null);
+            return;
+        }
+
+        console.log(event.target.files[0].name);
+
         setFile(event.target.files[0]);
     };
 
     const handleSubmit = async () => {
         setLoading(true);
         setErrorMessage("");
+        if (!file) {
+            setErrorMessage("Please select a file to upload.");
+            setLoading(false);
+            return;
+        }
+
+        let dependencies = binaryDependencies;
+        if (newBinaryDependency) {
+            dependencies = [...binaryDependencies, { name: newBinaryDependency }];
+        }
 
         try {
             const formData = new FormData();
             formData.append("file", file);
-            formData.append(
-                "binary_dependencies",
-                JSON.stringify(binaryDependencies)
-            );
+            formData.append("binary_dependencies", JSON.stringify(dependencies));
             formData.append("changelog", changelog);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/Modules/AddModule`, {
                 method: "POST",
                 body: formData,
-                credentials: "include",
+                credentials: "include"
             });
 
             if (response.ok) {
-                const data = await response.json();
-                setModuleId(data.Module_id);
+                const data = (await response.json()) as ModuleData;
+                navigate(`/module/${data.Module_id}`, { replace: true });
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message.replace(/\n/g, "<br>"));
+                setFile(null);
             }
         } catch (error) {
             setErrorMessage("An error occurred while uploading the module.");
@@ -67,92 +87,103 @@ export default function UploadPage() {
         }
     };
 
-    if (moduleId) {
-        window.location.href = `/module/${moduleId}`;
-    }
-
     return (
         <>
-            <h1 className="text-4xl font-bold mb-3">Upload a module</h1>
-            <p className="text-lg font-normal text-gray-400">
-                Upload a new module to the repository or upload a new version of
-                one of your existing modules to update it.
+            <h1 className="mb-3 text-4xl font-bold">Upload a module</h1>
+            <p className="mb-4 text-lg font-normal text-gray-400">
+                You can utilize this section to upload a new module to our repository or submit a new version of an
+                existing module for updates
             </p>
-            <h2 className="text-2xl font-bold mb-3">Binary dependencies</h2>
-            <p className="text-lg font-normal text-gray-400">
-                If your module depends on any binaries, you can specify them
-                here. Use one field per dependency.
-            </p>
-            {binaryDependencies.map((dependency, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                    <Input
-                        type="text"
-                        value={dependency.name}
-                        onChange={(e) => handleDependencyChange(index, e)}
-                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
-                    />
-                    <Button
-                        onClick={() => removeDependency(index)}
-                        className="bg-red-500 text-white rounded-md p-2 hover:bg-red-600 focus:outline-none"
-                    >
-                        -
-                    </Button>
-                </div>
-            ))}
-            <Button
-                onClick={addDependency}
-                className="bg-green-500 text-white rounded-md p-2 hover:bg-green-600 focus:outline-none"
-            >
-                +
-            </Button>
-            <h2 className="text-2xl font-bold mb-3">Changelog</h2>
-            <p className="text-lg font-normal text-gray-400">
-                Provide a changelog for this version of the module. If you leave
-                this blank, the changelog will be set to "Initial upload" for
-                new modules, or "No changelog provided" for existing modules.
-            </p>
-            <MDEditor
-                value={changelog}
-                onChange={(value) => {
-                    setChangelog(value || "");
-                }}
-                previewOptions={{
-                    rehypePlugins: [[rehypeSanitize]],
-                }}
-            />
-            <h2 className="text-2xl font-bold mb-3">Module file</h2>
-            <p className="text-lg font-normal text-gray-400">
-                Place your module .cs file here to upload it to the repository.
-                It will be validated to check for compile-time errors, if there
-                are no binary dependencies. Afterwards it will await approval by
-                a moderator.
-            </p>
-            <input
-                type="file"
-                onChange={handleFileChange}
-                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-500"
-            />
-            <Button
-                onClick={handleSubmit}
-                className="bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 focus:outline-none"
-            >
-                Upload
-            </Button>
-            {loading ? (
-                <div
-                    className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                    role="status"
-                    aria-label="loading"
-                >
-                    <span className="sr-only">Uploading and validating...</span>
-                </div>
-            ) : null}
-            {errorMessage && (
-                <div
-                    className="text-red-500"
-                    dangerouslySetInnerHTML={{ __html: errorMessage }}
-                ></div>
-            )}
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Binary dependencies</h2>
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    If your module relies on any binary dependencies, please specify them in the fields below. Use a
+                    separate field for each dependency.
+                </p>
+
+                <ul className="space-y-2">
+                    {binaryDependencies.map((dependency, index) => (
+                        <li key={index} className="flex items-center space-x-2">
+                            <Input
+                                type="text"
+                                value={dependency.name}
+                                onChange={(e) => handleDependencyChange(index, e)}
+                                className="w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring"
+                            />
+                            <Button
+                                onClick={() => removeDependency(index)}
+                                className="w-10 rounded-md bg-red-500 p-2 text-white hover:bg-red-600 focus:outline-none"
+                            >
+                                -
+                            </Button>
+                        </li>
+                    ))}
+
+                    <li className="flex items-center space-x-2">
+                        <Input
+                            type="text"
+                            value={newBinaryDependency}
+                            onChange={(e) => setNewBinaryDependency(e.target.value)}
+                            className="w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring"
+                        />
+                        <Button
+                            onClick={() => addDependency()}
+                            className="w-10 rounded-md bg-green-600 p-2 text-white hover:bg-green-700 focus:outline-none"
+                        >
+                            +
+                        </Button>
+                    </li>
+                </ul>
+            </section>
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Changelog</h2>
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    Please provide a detailed changelog for this version of the module. Leaving this section blank will
+                    result in the changelog being set to "Initial upload" for new modules or "No changelog provided" for
+                    existing ones.
+                </p>
+                <p className="my-2 flex items-center text-amber-500">
+                    Note: Only images hosted on imgur are allowed. HTML is not allowed.
+                </p>
+                <MDEditor
+                    value={changelog}
+                    onChange={(value) => {
+                        setChangelog(value || "");
+                    }}
+                    previewOptions={{
+                        rehypePlugins: [[rehypeSanitize]]
+                    }}
+                />
+            </section>
+
+            <section className="mb-4">
+                <h2 className="text-2xl font-bold">Module file</h2>
+                <p className="mb-2 text-lg font-normal text-gray-400">
+                    Place your module .cs file here to upload it to the repository. It will be validated to check for
+                    compile-time errors, if there are no binary dependencies. Afterwards it will await approval by a
+                    moderator.
+                </p>
+
+                {errorMessage && <p className="text-amber-500">We've removed the file from the file selector!</p>}
+                <Input type="file" onChange={handleFileChange} className="cursor-pointer file:text-white" />
+            </section>
+
+            <div className="flex items-center gap-2">
+                <Button onClick={handleSubmit} disabled={loading}>
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Please wait
+                        </>
+                    ) : (
+                        <>Upload</>
+                    )}
+                </Button>
+
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            </div>
         </>
     );
 }
