@@ -261,6 +261,10 @@ export default function ModulePage() {
 
     // Is editing module state
     const [isEditingModule, setIsEditingModule] = useState(false);
+    const canEditModule =
+        user?.User_roles === "ADMIN" ||
+        user?.User_roles === "MODERATOR" ||
+        module?.users.User_discord_id === user?.User_discord_id;
 
     // Module markdown state
     const [module_markdown, setModuleMarkdown] = useState(module?.Module_markdown);
@@ -323,16 +327,17 @@ export default function ModulePage() {
                                                 Save
                                             </Button>
                                         </div>
-                                    ) : user?.User_discord_id.toString() ==
-                                      module?.users.User_discord_id || user?.User_roles == "ADMIN" || user?.User_roles == "MODERATOR" ? (
-                                        <Button
-                                            variant="outline"
-                                            className="ml-auto"
-                                            onClick={() => editModule(true)}
-                                        >
-                                            Edit
-                                        </Button>
-                                    ) : null}
+                                    ) : (
+                                        canEditModule && (
+                                            <Button
+                                                variant="outline"
+                                                className="ml-auto"
+                                                onClick={() => editModule(true)}
+                                            >
+                                                Edit
+                                            </Button>
+                                        )
+                                    )}
                                 </div>
                             </CardHeader>
 
