@@ -327,11 +327,16 @@ export default function ModulePage() {
                                                 Save
                                             </Button>
                                         </div>
-                                    ) : (
-                                        <Button variant="outline" className="ml-auto" onClick={() => editModule(true)}>
+                                    ) : user?.User_discord_id ==
+                                      module?.users.User_discord_id || user?.User_roles == "ADMIN" || user?.User_roles == "MODERATOR" ? (
+                                        <Button
+                                            variant="outline"
+                                            className="ml-auto"
+                                            onClick={() => editModule(true)}
+                                        >
                                             Edit
                                         </Button>
-                                    )}
+                                    ) : null}
                                 </div>
                             </CardHeader>
 
