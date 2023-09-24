@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import MDEditor from "@uiw/react-md-editor";
@@ -15,6 +15,8 @@ export default function UploadPage() {
     const [errorMessage, setErrorMessage] = useState("");
     const [changelog, setChangelog] = useState("");
     const navigate = useNavigate();
+
+    const fileInput = useRef<HTMLInputElement>(null);
 
     const addDependency = () => {
         if (!newBinaryDependency) return;
@@ -79,6 +81,7 @@ export default function UploadPage() {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message.replace(/\n/g, "<br>"));
                 setFile(null);
+                if (fileInput.current) fileInput.current.value = "";
             }
         } catch (error) {
             setErrorMessage("An error occurred while uploading the module.");
@@ -167,7 +170,12 @@ export default function UploadPage() {
                 </p>
 
                 {errorMessage && <p className="text-amber-500">We've removed the file from the file selector!</p>}
-                <Input type="file" onChange={handleFileChange} className="cursor-pointer file:text-white" />
+                <Input
+                    ref={fileInput}
+                    type="file"
+                    onChange={handleFileChange}
+                    className="cursor-pointer file:text-white"
+                />
             </section>
 
             <div className="flex items-center gap-2">
