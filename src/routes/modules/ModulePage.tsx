@@ -50,9 +50,6 @@ const sortDependencies = (a: Dependencies, b: Dependencies) => {
     return a.module.Module_id - b.module.Module_id;
 };
 
-const deduplicateBinaryDependencies = (dependency: Dependencies, index: number, dependencies: Dependencies[]) =>
-    dependencies.findIndex((d) => d.Dependency_binary_text === dependency.Dependency_binary_text) === index;
-
 const DependenciesCard = ({ dependencies }: { dependencies: Dependencies[] }) => {
     if (!dependencies.length) return null;
 
@@ -73,7 +70,6 @@ const DependenciesCard = ({ dependencies }: { dependencies: Dependencies[] }) =>
 
                     <TableBody>
                         {dependencies
-                            .filter(deduplicateBinaryDependencies)
                             .sort(sortDependencies)
                             .map((dependency: Dependencies) => (
                                 <TableRow key={dependency.Dependency_binary_text ?? dependency.module.Module_id}>
