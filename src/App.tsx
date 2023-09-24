@@ -8,6 +8,7 @@ import { Slide, ToastContainer } from "react-toastify";
 import Privacy from "./routes/Privacy.tsx";
 import UploadPage from "./routes/UploadPage.tsx";
 import RedirectPage from "./routes/redirect.tsx";
+import Error from "./routes/Error.tsx";
 
 export default function App() {
     return (
@@ -35,6 +36,7 @@ export default function App() {
                         <Route path={"/upload"} element={<UploadPage />} />
                         <Route path={"/privacy"} element={<Privacy />} />
                         <Route path={"/redirect"} element={<RedirectPage />} />
+                        <Route path={"/error"} element={<Error />} />
                         <Route path={"/admin/modules"} element={<ModuleListPage baseFilter="unapproved" />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
