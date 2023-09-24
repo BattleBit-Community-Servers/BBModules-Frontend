@@ -307,7 +307,7 @@ export default function ModulePage() {
                             <CardHeader>
                                 <div className="flex max-w-full items-start justify-between gap-2">
                                     <div className="flex-1 overflow-hidden">
-                                        <CardTitle className="mb-2 overflow-hidden overflow-ellipsis">
+                                        <CardTitle className="mb-2 overflow-hidden overflow-ellipsis leading-snug">
                                             {module.Module_name}
                                         </CardTitle>
 

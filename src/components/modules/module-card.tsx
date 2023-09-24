@@ -23,7 +23,7 @@ export const ModuleCard = ({ module }: { module: ModuleData }) => {
                 <CardTitle>
                     <Link to={`/module/${module.Module_id}`}>
                         <div className="flex items-baseline gap-2">
-                            <span className="overflow-hidden overflow-ellipsis">{module.Module_name}</span>
+                            <span className="overflow-hidden overflow-ellipsis leading-snug">{module.Module_name}</span>
 
                             {newestVersion && (
                                 <span className="text-sm text-muted-foreground">v{newestVersion.Version_v_number}</span>
