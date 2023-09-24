@@ -34,12 +34,24 @@ const ModuleApprovalAlert = ({ version, approvable }: { version: Versions; appro
 };
 
 const sortDependencies = (a: Dependencies, b: Dependencies) => {
-    if (a.Dependency_type === "binary") return -1;
-    if (b.Dependency_type === "binary") return 1;
-    if (a.Dependency_type === "required") return -1;
-    if (b.Dependency_type === "required") return 1;
-    return 0;
+    if (a.Dependency_type === "binary" && b.Dependency_type !== "binary") return -1;
+    if (a.Dependency_type !== "binary" && b.Dependency_type === "binary") return 1;
+
+    if (a.Dependency_type === "required" && b.Dependency_type !== "required") return -1;
+    if (a.Dependency_type !== "required" && b.Dependency_type === "required") return 1;
+
+    if (a.Dependency_type === "optional" && b.Dependency_type !== "optional") return -1;
+    if (a.Dependency_type !== "optional" && b.Dependency_type === "optional") return 1;
+
+    if (a.Dependency_binary_text && b.Dependency_binary_text) {
+        return a.Dependency_binary_text.localeCompare(b.Dependency_binary_text);
+    }
+
+    return a.module.Module_id - b.module.Module_id;
 };
+
+const deduplicateBinaryDependencies = (dependency: Dependencies, index: number, dependencies: Dependencies[]) =>
+    dependencies.findIndex((d) => d.Dependency_binary_text === dependency.Dependency_binary_text) === index;
 
 const DependenciesCard = ({ dependencies }: { dependencies: Dependencies[] }) => {
     if (!dependencies.length) return null;
@@ -60,23 +72,26 @@ const DependenciesCard = ({ dependencies }: { dependencies: Dependencies[] }) =>
                     </TableHeader>
 
                     <TableBody>
-                        {dependencies?.sort(sortDependencies).map((dependency: Dependencies) => (
-                            <TableRow key={dependency.Dependency_binary_text ?? dependency.module.Module_id}>
-                                <TableCell>
-                                    {dependency.Dependency_type === "binary" ? (
-                                        dependency.Dependency_binary_text
-                                    ) : (
-                                        <Link to={`/module/${dependency.module.Module_id}`}>
-                                            <div className="flex gap-1 transition-colors hover:text-blue-600">
-                                                <span>{dependency.module.Module_name}</span>
-                                                <HiExternalLink />
-                                            </div>
-                                        </Link>
-                                    )}
-                                </TableCell>
-                                <TableCell className="capitalize">{dependency.Dependency_type}</TableCell>
-                            </TableRow>
-                        ))}
+                        {dependencies
+                            .filter(deduplicateBinaryDependencies)
+                            .sort(sortDependencies)
+                            .map((dependency: Dependencies) => (
+                                <TableRow key={dependency.Dependency_binary_text ?? dependency.module.Module_id}>
+                                    <TableCell>
+                                        {dependency.Dependency_type === "binary" ? (
+                                            dependency.Dependency_binary_text
+                                        ) : (
+                                            <Link to={`/module/${dependency.module.Module_id}`}>
+                                                <div className="flex gap-1 transition-colors hover:text-blue-600">
+                                                    <span>{dependency.module.Module_name}</span>
+                                                    <HiExternalLink />
+                                                </div>
+                                            </Link>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="capitalize">{dependency.Dependency_type}</TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </CardContent>

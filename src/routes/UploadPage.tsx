@@ -62,6 +62,11 @@ export default function UploadPage() {
             dependencies = [...binaryDependencies, { name: newBinaryDependency }];
         }
 
+        // deduplicate dependencies
+        dependencies = dependencies
+            .filter((dependency) => dependency.name !== "")
+            .filter((dependency, index, self) => self.findIndex((d) => d.name === dependency.name) === index);
+
         try {
             const formData = new FormData();
             formData.append("file", file);
