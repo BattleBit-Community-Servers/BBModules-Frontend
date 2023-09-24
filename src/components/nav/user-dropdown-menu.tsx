@@ -8,7 +8,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
-import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../../api/user.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.tsx";
