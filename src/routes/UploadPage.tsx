@@ -6,6 +6,7 @@ import rehypeSanitize from "rehype-sanitize";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ModuleData } from "../../api/modules.types.ts";
+import { SanitizedMarkdown } from "../components/common/sanitized-markdown.tsx";
 
 export default function UploadPage() {
     const [loading, setLoading] = useState(false);
@@ -197,6 +198,40 @@ export default function UploadPage() {
 
                 {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             </div>
+
+            <SanitizedMarkdown markdown="# Module Submission Guidelines and Safety Measures
+## 1. Data Privacy and Telemetry:
+Do Not Collect Personal User Data: Your module must not collect or transmit any personal user data to external servers or third-party sources without explicit user consent. This includes any form of telemetry that identifies individual users.
+## 2. Malicious Activities:
+No Malicious Intent: Modules must not engage in any malicious activities, including but not limited to stealing user data, injecting harmful code, or compromising system security.  
+No Data Theft: Your module must not attempt to steal sensitive information, passwords, or personal data from users.
+## 3. External Code Execution:
+No Untrusted External Code: Do not create modules that execute code from external or untrusted sources. This includes code injection, dynamic loading of scripts, or any action that can introduce security vulnerabilities.
+## 4. Mining or Unauthorized Activities:
+No Cryptocurrency Mining: Modules must not mine cryptocurrency or engage in any unauthorized activities that consume user resources without consent.
+## 5. Compliance with Laws and Regulations:
+Follow Legal Guidelines: Ensure that your module complies with all applicable laws and regulations, including copyright and intellectual property laws.
+## 6. Transparent Functionality:
+Clearly Documented Purpose: Clearly document the purpose and functionality of your module in its documentation. Users should have a clear understanding of what the module does and how it affects their experience.  
+Transparency and Verification: Code obfuscation techniques that deliberately obscure the functionality of your module are not allowed. Your module's code should be transparent and easily understandable to ensure the safety and trust of our community.
+## 7. Avoiding Unnecessary Access:
+Minimize Permissions: Your module should only provide functionality to the necessary permissions and access levels. Unnecessary access can raise concerns and affect user trust.
+## 8. Thorough Testing:
+Minimize Bugs: Thoroughly test your module to identify and fix any bugs or unintended behavior before submission.  
+Version Spam: Do not spam submissions with lots of small version updates to fix bugs.
+## 9. Continuous Improvement:
+Regular Maintenance: Keep your module up-to-date and responsive to user feedback. Address issues and make improvements promptly.
+## 10. Zero Tolerance for Harmful Modules:
+Immediate Removal: We have a zero-tolerance policy for modules that violate these guidelines or pose a security risk. Any module found to be harmful will be removed immediately.
+## 11. Reporting Violations:
+Community Responsibility: If you come across a module that violates these guidelines or poses a security concern, please report it to our staff immediately by sending a DM to ModMail.
+## 12. Offering Assistance:
+User Interaction: As users engage with your modules, they may have inquiries or encounter issues. To facilitate communication, users might tag you in the #module-help channel.  
+Supportive Involvement: When users seek assistance, we encourage you to actively engage and provide support for your modules. Your willingness to assist is greatly valued and contributes to the positive experience of our community.
+
+**By submitting a module, you acknowledge that you have read, understood, and agree to adhere to these guidelines and safety measures. Your contribution plays a vital role in maintaining the security and quality of our platform.**
+
+Thank you for your dedication to our community's well-being and for helping us create a safe and valuable environment for all users." />
         </>
     );
 }
